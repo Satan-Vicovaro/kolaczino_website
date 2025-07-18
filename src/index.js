@@ -19,11 +19,11 @@
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import SomeCompontent1 from "./components/SomeCompontent1";
+import App from "./App";
 
 const domNode = document.getElementById("root");
 
 
 const root = createRoot(domNode);
 
-root.render(<SomeCompontent1 />)
+root.render(<App />)
