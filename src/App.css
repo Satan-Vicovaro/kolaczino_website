@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.MainContent {
+  color: tan;
+  text-emphasis-color: initial;
+  background-color: brown;
+  size: 23cm;
+}
