@@ -1,7 +1,20 @@
 import React from "react";  
+import { useState } from "react";
 
-function Square() {
-  return <button className="square"> X </button>
+function Square({value, onSquareClick}) {
+
+  function handleClick() {
+    console.log("clicked: " + {value});
+  }
+
+  return (
+    <button
+      onClick={onSquareClick}
+      className="square"
+    > 
+      {value}
+    </button>
+  );
 }
 
 export default Square

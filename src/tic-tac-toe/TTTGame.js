@@ -1,8 +1,13 @@
 import React from "react"
 import Square from "./Square"
+import Board from "./Board"
 import "./TTTGame.css"
 
 function TTTGame() {
-  return <Square/>
+  return (
+    <>
+      <Board/>
+    </>
+    ) 
 }
 export default TTTGame
