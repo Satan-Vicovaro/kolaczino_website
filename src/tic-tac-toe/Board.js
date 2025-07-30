@@ -64,14 +64,35 @@ function Board() {
   }
 
   function generatePosibilitesToCheck(dimensionsNum, size) {
-    let posibilites = Array();
-    // dimension 1:
-    for (let i = 0; i < dimensionsNum; i++) {
-      let value = Array(dimensionsNum).fill(0);
-      value[i] = 1;
-      posibilites.push(value)
+    let result = Array();
+    let firstDimension = Array();
+    generateCombinations(firstDimension, Array(),dimensionsNum,1);
+    result = result.concat(firstDimension);
+
+    for(let i = 2; i < dimensionsNum; i++) {
+      let dimensionResult = Array();
+      generateCombinations(dimensionResult,Array(),dimensionsNum,i);
+      let revertedDimension = structuredClone(dimensionResult);
+      revertedDimension.forEach((array, index) => {
+        for(let i = 0; i < array.length; i++) {
+          if (array[i] === 1) {
+            array[i] = -1;
+            break;
+          }
+        }
+      } )
+      dimensionResult = dimensionResult.concat(revertedDimension);
+      result = result.concat(dimensionResult);
     }
-    console.log(posibilites);
+
+    // last dimension
+    for(let i = 0; i < dimensionsNum; i++) {
+      let lastDimension = Array(dimensionsNum).fill(1);
+      lastDimension[i] = -1;
+      result.push(lastDimension);
+    }
+
+    return result;
   }
   
   function decideWinner() {
@@ -80,11 +101,9 @@ function Board() {
 
   // game data 
   const size = 3;
-  const dimensionsNum = 8;
-  let result = Array();
-  generateCombinations(result,Array(),dimensionsNum,4);
-  console.log(result);
-  //generatePosibilitesToCheck(dimensionsNum,size);
+  const dimensionsNum = 3;
+  let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
+  console.log(allPosibilites);
 
   const squareCount = Math.pow(size,dimensionsNum);
   
