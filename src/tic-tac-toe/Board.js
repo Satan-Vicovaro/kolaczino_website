@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Square from "./Square";
 import { screen } from "@testing-library/dom";
+import { wait } from "@testing-library/user-event/dist/utils";
 function Board() {
   function handleSquareClick(i) {
     //square is already taken 
@@ -19,7 +20,7 @@ function Board() {
     setSquares(nextSquares);
   }
   
-  function getSquare(position, size) {
+  function getSquare(position) {
     let index = 0;
     // square position is eg. index = x + n^2y + n^3z + ...
     for (let i = 0; i < position.length; i++) {
@@ -94,16 +95,60 @@ function Board() {
 
     return result;
   }
+
+  function slowChange() {
+
+  } 
+    
+  function checkLoop(direction) {
+    
+    let currentPoint = Array(dimensionsNum).fill(0);
+    currentPoint = currentPoint.map((val, i) =>
+      direction[i] === -1 ? size - 1 : val
+    );
+    
+    const indexesToIncrease = [];
+    direction.forEach((val, i) => {
+      if(val === 1) {
+       indexesToIncrease.push({index: i, mode:'I'}); // increase that index
+      }
+      else if(val === -1) {
+       indexesToIncrease.push({index: i, mode:'D'}); // decrease that index (size - i)
+      } 
+    });
+
+    
+    let lineIsFull = true;
+    for (let i = 0; i < size; i++) {
+      if(getSquare(currentPoint)=== null) {
+        lineIsFull = false;
+        break;
+      }
+      indexesToIncrease.forEach((val) => {
+        if(val.mode === 'I') {
+          currentPoint[val.index] += 1;
+          return;
+        }
+        if(val.mode === 'D') {
+          currentPoint[val.index] -= 1;
+        }
+      });
+    }  
+  }
   
   function decideWinner() {
-    
+    let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
+    console.log(allPosibilites);
+    for(let i = 0; i < allPosibilites.length; i++) {
+      let direction = allPosibilites[i];
+      checkLoop(direction); 
+    }  
   }
 
   // game data 
-  const size = 3;
+  const size = 5;
   const dimensionsNum = 3;
-  let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
-  console.log(allPosibilites);
+  decideWinner();
 
   const squareCount = Math.pow(size,dimensionsNum);
   
