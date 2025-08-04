@@ -26,7 +26,7 @@ function Board() {
     for (let i = 0; i < position.length; i++) {
       index += position[i] * Math.pow(size,i);
     }
-    return index;
+    return squares[index];
   }
   
   function pointsToCheck(dimensionsNum, size, result) {
@@ -95,65 +95,109 @@ function Board() {
 
     return result;
   }
+  
+  function seperateIndexes(direction, indexesToCheckDimension, indexesToShiftStartPoint) {
+    direction.forEach((val, i) => {
+      if (val === 1) {
+       indexesToCheckDimension.push({index: i, mode:'I'}); // increase that index
+      }
+      else if (val === -1) {
+       indexesToCheckDimension.push({index: i, mode:'D'}); // decrease that index (size - i)
+      } else if (val === 0) {
+        indexesToShiftStartPoint.push(i);
+      }
+    });
+  }
 
-  function slowChange() {
-
-  } 
-    
-  function checkLoop(direction) {
-    
-    let currentPoint = Array(dimensionsNum).fill(0);
-    currentPoint = currentPoint.map((val, i) =>
+  function createStartPoint(direction) {
+    let startPoint = Array(dimensionsNum).fill(0);
+    startPoint = startPoint.map((val, i) =>
       direction[i] === -1 ? size - 1 : val
     );
-    
-    const indexesToIncrease = [];
-    direction.forEach((val, i) => {
-      if(val === 1) {
-       indexesToIncrease.push({index: i, mode:'I'}); // increase that index
-      }
-      else if(val === -1) {
-       indexesToIncrease.push({index: i, mode:'D'}); // decrease that index (size - i)
-      } 
-    });
+    return startPoint
+  }
 
-    
-    let lineIsFull = true;
-    for (let i = 0; i < size; i++) {
-      if(getSquare(currentPoint)=== null) {
-        lineIsFull = false;
-        break;
+  function checkLoop(direction) {
+    let startPoint = createStartPoint(direction);
+
+    const indexesToCheckDimension = [];
+    const indexesToShiftStartPoint = [];
+    seperateIndexes(direction, indexesToCheckDimension, indexesToShiftStartPoint);
+
+    let curIteration = 0;
+    let maxIteration = Math.pow(size, indexesToShiftStartPoint.length);
+
+    while (curIteration < maxIteration) {
+      let lineStatus = checkDimension(startPoint.slice(), indexesToCheckDimension);
+      
+      if (lineStatus.filled) {
+        console.log(lineStatus.player);
       }
-      indexesToIncrease.forEach((val) => {
-        if(val.mode === 'I') {
-          currentPoint[val.index] += 1;
-          return;
-        }
-        if(val.mode === 'D') {
-          currentPoint[val.index] -= 1;
+
+      curIteration +=1;
+      shiftStartPoint(startPoint, indexesToShiftStartPoint, curIteration);
+    }
+  }
+
+  function checkDimension(startPoint, indexesToCheckDimension) {
+    let player = getSquare(startPoint);
+    if (player === null || player === undefined) {
+        return {filled: false, player:null}
+    }
+
+    for (let i = 0; i < size; i++) {
+      if (getSquare(startPoint) !== player) {
+        return {filled: false, player:player}
+      }
+
+      indexesToCheckDimension.forEach((val) => {
+        if (val.mode === 'I') {
+          startPoint[val.index] += 1;
+        } else if (val.mode === 'D') {
+          startPoint[val.index] -= 1;
         }
       });
-    }  
+    }
+    return {filled: true, player:player}
   }
-  
+
+  function shiftStartPoint(point, indexesToShiftStartPoint, curIteration) {
+    let devisor = size;
+    let newCoordinates = Array(dimensionsNum).fill(0);
+    
+    let i = 0;
+    while(curIteration !== 0) {
+      newCoordinates[i] = curIteration%devisor;
+      curIteration = Math.floor(curIteration / devisor); // curIteration /= devisor xD
+      i += 1;
+    }
+    
+    for (let i = 0; i < indexesToShiftStartPoint.length; i++) {
+      let index = indexesToShiftStartPoint[i];
+      point[index] = newCoordinates[i];
+    }
+  }
+
   function decideWinner() {
     let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
-    console.log(allPosibilites);
-    for(let i = 0; i < allPosibilites.length; i++) {
+    //console.log(allPosibilites);
+    for (let i = 0; i < allPosibilites.length; i++) {
       let direction = allPosibilites[i];
       checkLoop(direction); 
     }  
   }
 
   // game data 
-  const size = 5;
+  const size = 3;
   const dimensionsNum = 3;
-  decideWinner();
-
+  
   const squareCount = Math.pow(size,dimensionsNum);
   
   const [squares, setSquares] = useState(Array({length: squareCount}).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
+  
+  decideWinner();
+
 
   // square elements
   const board = Array.from({length: squareCount }, (_,index) => index + 1);
