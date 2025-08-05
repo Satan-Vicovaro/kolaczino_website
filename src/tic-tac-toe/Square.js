@@ -1,7 +1,7 @@
 import React from "react";  
 import { useState } from "react";
 
-function Square({value, onSquareClick}) {
+function Square({value, onSquareClick, cordinates}) {
 
   function handleClick() {
     console.log("clicked: " + {value});

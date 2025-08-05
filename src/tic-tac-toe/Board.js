@@ -5,9 +5,9 @@ import { wait } from "@testing-library/user-event/dist/utils";
 function Board() {
   function handleSquareClick(i) {
     //square is already taken 
-    if (squares[i]) {
-      return;
-    }
+    // if (squares[i]) {
+    //   return;
+    // }
     const nextSquares = squares.slice();
     
     if (xIsNext) {
@@ -141,10 +141,12 @@ function Board() {
 
   function checkDimension(startPoint, indexesToCheckDimension) {
     let player = getSquare(startPoint);
-    if (player === null || player === undefined) {
-        return {filled: false, player:null}
+    // if (player === null || player === undefined) {
+    //     return {filled: false, player:null}
+    // }
+    if (!(player ==="X" || player ==="O")) {
+      return {filled: false, player:null}
     }
-
     for (let i = 0; i < size; i++) {
       if (getSquare(startPoint) !== player) {
         return {filled: false, player:player}
@@ -193,18 +195,18 @@ function Board() {
   
   const squareCount = Math.pow(size,dimensionsNum);
   
-  const [squares, setSquares] = useState(Array({length: squareCount}).fill(null));
+  const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => i));
   const [xIsNext, setXIsNext] = useState(true);
   
   decideWinner();
 
 
   // square elements
-  const board = Array.from({length: squareCount }, (_,index) => index + 1);
+  const board = Array.from({length: squareCount}, (_,index) => index);
   return <> {board.map((i) => (
     <React.Fragment>
       <Square key={i} value={squares[i]} onSquareClick={() => handleSquareClick(i)} />
-      {(i) % size === 0 && <br />}
+      {(i + 1) % size === 0 && <br />}
     </React.Fragment>
   ))}</>;
 }
