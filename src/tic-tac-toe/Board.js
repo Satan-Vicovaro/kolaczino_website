@@ -199,8 +199,6 @@ function Board() {
   const [xIsNext, setXIsNext] = useState(true);
   
   decideWinner();
-
-
   // square elements
   const board = Array.from({length: squareCount}, (_,index) => index);
   return <> {board.map((i) => (

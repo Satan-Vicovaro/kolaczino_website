@@ -20,6 +20,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import "@radix-ui/themes/styles.css";
 
 const domNode = document.getElementById("root");
 
