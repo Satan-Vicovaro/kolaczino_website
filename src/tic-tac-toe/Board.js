@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import Square from "./Square";
 import { screen } from "@testing-library/dom";
 import { wait } from "@testing-library/user-event/dist/utils";
-function Board() {
+function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
   function handleSquareClick(i) {
     //square is already taken 
     // if (squares[i]) {
     //   return;
     // }
+    
+    setScorePlayerA(scorePlayerA + 1);
+    setScorePlayerB(scorePlayerB + 1);
+
     const nextSquares = squares.slice();
     
     if (xIsNext) {
