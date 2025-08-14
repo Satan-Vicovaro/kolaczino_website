@@ -8,9 +8,8 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
     // if (squares[i]) {
     //   return;
     // }
-    
-    setScorePlayerA(scorePlayerA + 1);
-    setScorePlayerB(scorePlayerB + 1);
+    setScorePlayerA(scorePlayerA);
+    setScorePlayerB(scorePlayerB);
 
     const nextSquares = squares.slice();
     
@@ -135,7 +134,11 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
       let lineStatus = checkDimension(startPoint.slice(), indexesToCheckDimension);
       
       if (lineStatus.filled) {
-        console.log(lineStatus.player);
+        if (lineStatus.player === "A") {
+          scorePlayerA += 1;
+        } else {
+          scorePlayerB += 1;
+        }
       }
 
       curIteration +=1;
@@ -195,7 +198,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
 
   // game data 
   const size = 3;
-  const dimensionsNum = 3;
+  const dimensionsNum = 6;
   
   const squareCount = Math.pow(size,dimensionsNum);
   
@@ -203,14 +206,103 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
   const [xIsNext, setXIsNext] = useState(true);
   
   decideWinner();
-  // square elements
-  const board = Array.from({length: squareCount}, (_,index) => index);
-  return <> {board.map((i) => (
-    <React.Fragment>
-      <Square key={i} value={squares[i]} onSquareClick={() => handleSquareClick(i)} />
-      {(i + 1) % size === 0 && <br />}
-    </React.Fragment>
-  ))}</>;
+
+  // Recursive function to group into nested grids
+  function buildGrid(items, depth) {
+    if (depth === 1) {
+      // Base case: last dimension → just render row of squares
+      return (
+        <GridHorizontal columns={size}>
+          {items.map((value, idx) => (
+            <Square
+              key={value}
+              value={squares[value]}
+              onSquareClick={() => handleSquareClick(value)}
+            />
+          ))}
+        </GridHorizontal>
+      );
+    }
+
+    // Group items into chunks of size^(depth-1)
+    const chunkSize = Math.pow(size, depth - 1);
+    const groups = [];
+    for (let i = 0; i < items.length; i += chunkSize) {
+      groups.push(items.slice(i, i + chunkSize));
+    }
+
+    if (depth === 2 || depth === 3) {
+      return (
+        <GridVertical rows={size} gap="10px">
+          {groups.map((group, idx) => (
+            <div key={idx}>{buildGrid(group, depth - 1)}</div>
+          ))}
+        </GridVertical>
+      );
+    }
+  
+    if ((depth) % 2 === 0) {
+      return (
+        <GridHorizontal columns={size} gap="10px">
+          {groups.map((group, idx) => (
+            <div key={idx}>{buildGrid(group, depth - 1)}</div>
+          ))}
+        </GridHorizontal>
+      );
+    } else {
+      return (
+        <GridVertical rows={size} gap="10px">
+          {groups.map((group, idx) => (
+            <div key={idx}>{buildGrid(group, depth - 1)}</div>
+          ))}
+        </GridVertical>
+      );
+    }
+  }
+  
+  function GridVertical({rows, gap = "2px", children }) {
+    return (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateRows: `repeat(${rows}, auto)`,
+          gap,
+          border:"1px solid black",
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  function GridHorizontal({ columns, gap = "2px", children }) {
+    return (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${columns}, auto)`,
+          gap,
+          border:"1px solid black",
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  const indices = Array.from({ length: squareCount }, (_, i) => i);
+  return <div
+    style={{
+      width: "75%",            // take 80% of viewport width
+      margin: "0 auto",        // center horizontally
+      display: "flex",         // use flexbox for inner alignment
+      justifyContent: "center",// center inner content horizontally
+      alignItems: "center",    // center inner content vertically
+      minHeight: "100vh",      // make it fill screen height
+      border: "1px solid black"
+    }}>
+    {buildGrid(indices, dimensionsNum)}</div>;
+
 }
 
 export default Board

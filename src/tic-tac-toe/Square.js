@@ -17,4 +17,4 @@ function Square({value, onSquareClick, cordinates}) {
   );
 }
 
-export default Square
+export default Square;

@@ -13,8 +13,8 @@ function TTTGame() {
     setScorePlayerB(value);
   }
 
-  let [scorePlayerA, setScorePlayerA] = useState(321);
-  let [scorePlayerB, setScorePlayerB] = useState(123);
+  let [scorePlayerA, setScorePlayerA] = useState(0);
+  let [scorePlayerB, setScorePlayerB] = useState(0);
 
   return (
     <>
