@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState, useRef } from "react";
 import Square from "./Square";
 import { screen } from "@testing-library/dom";
 import { wait } from "@testing-library/user-event/dist/utils";
-function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
+function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, dimensionNum ,boardSize,}) {
   function handleSquareClick(i) {
     //square is already taken 
     // if (squares[i]) {
@@ -122,7 +123,6 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
 
   function checkLoop(direction) {
     let startPoint = createStartPoint(direction);
-
     const indexesToCheckDimension = [];
     const indexesToShiftStartPoint = [];
     seperateIndexes(direction, indexesToCheckDimension, indexesToShiftStartPoint);
@@ -130,20 +130,24 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
     let curIteration = 0;
     let maxIteration = Math.pow(size, indexesToShiftStartPoint.length);
 
+    let scoreA = 0;
+    let scoreB = 0;
     while (curIteration < maxIteration) {
       let lineStatus = checkDimension(startPoint.slice(), indexesToCheckDimension);
       
       if (lineStatus.filled) {
-        if (lineStatus.player === "A") {
-          scorePlayerA += 1;
+        if (lineStatus.player === "X") {
+          scoreA += 1;
         } else {
-          scorePlayerB += 1;
+          scoreB += 1;
         }
       }
 
       curIteration +=1;
       shiftStartPoint(startPoint, indexesToShiftStartPoint, curIteration);
     }
+    
+    return {scoreA, scoreB}
   }
 
   function checkDimension(startPoint, indexesToCheckDimension) {
@@ -189,16 +193,23 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
 
   function decideWinner() {
     let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
-    //console.log(allPosibilites);
+    let totalScoreA = 0;
+    let totalScoreB = 0;
     for (let i = 0; i < allPosibilites.length; i++) {
       let direction = allPosibilites[i];
-      checkLoop(direction); 
+      const {scoreA, scoreB} = checkLoop(direction);
+      totalScoreA += scoreA;
+      totalScoreB += scoreB;
     }  
+    setScorePlayerA(totalScoreA);
+    setScorePlayerB(totalScoreB);
   }
 
+
+
   // game data 
-  const size = 3;
-  const dimensionsNum = 6;
+  const size = boardSize;
+  const dimensionsNum = dimensionNum;
   
   const squareCount = Math.pow(size,dimensionsNum);
   
@@ -233,7 +244,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
 
     if (depth === 2 || depth === 3) {
       return (
-        <GridVertical rows={size} gap="10px">
+       <GridVertical rows={size} gap="10px">
           {groups.map((group, idx) => (
             <div key={idx}>{buildGrid(group, depth - 1)}</div>
           ))}
@@ -305,4 +316,4 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB}) {
 
 }
 
-export default Board
+export default Board;

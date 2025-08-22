@@ -3,6 +3,7 @@ import Square from "./Square"
 import Board from "./Board"
 import GameInfo from "./GameInfo"
 import "./TTTGame.css"
+import OptionSlider from "./OptionSlider"
 
 function TTTGame() {
   function UpdateScoreA(value) {
@@ -15,6 +16,9 @@ function TTTGame() {
 
   let [scorePlayerA, setScorePlayerA] = useState(0);
   let [scorePlayerB, setScorePlayerB] = useState(0);
+  
+  let [dimensionNum, setDimensionNum] = useState([2]);
+  let [boardSize, setBoardSize] = useState([3]);
 
   return (
     <>
@@ -23,9 +27,14 @@ function TTTGame() {
         scorePlayerB={scorePlayerB}
         
         setScorePlayerA={setScorePlayerA}
-        setScorePlayerB={setScorePlayerB}/>
+        setScorePlayerB={setScorePlayerB}
+
+        dimensionNum={dimensionNum[0]}
+        boardSize={boardSize}
+      />
       
-      <GameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} />  
+      <GameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} dimensionNum={dimensionNum} />  
+      <OptionSlider value={dimensionNum} setValue={setDimensionNum} max={6} min={1} />
     </>
     ) 
 }
