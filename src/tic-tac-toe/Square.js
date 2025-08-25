@@ -1,7 +1,7 @@
 import React from "react";  
 import { useState } from "react";
 
-function Square({value, onSquareClick, cordinates}) {
+function Square({value, onSquareClick, onSquareMouseEnter, onSquareMouseLeave, style}) {
 
   function handleClick() {
     console.log("clicked: " + {value});
@@ -10,7 +10,11 @@ function Square({value, onSquareClick, cordinates}) {
   return (
     <button
       onClick={onSquareClick}
+      id = {value}
       className="square"
+      onMouseEnter={onSquareMouseEnter}
+      onMouseLeave={onSquareMouseLeave}
+      style = {style}
     > 
       {value}
     </button>

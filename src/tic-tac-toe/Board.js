@@ -1,7 +1,7 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect} from "react";
 import Square from "./Square";
-import { screen } from "@testing-library/dom";
+import { screen, waitFor } from "@testing-library/dom";
 import { wait } from "@testing-library/user-event/dist/utils";
 function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, dimensionNum ,boardSize,}) {
   function handleSquareClick(i) {
@@ -15,15 +15,56 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     const nextSquares = squares.slice();
     
     if (xIsNext) {
-      nextSquares[i] = "X";
+      nextSquares[i].value = "X";
     } else {
-      nextSquares[i] = "O";
+      nextSquares[i].value = "O";
     }
     setXIsNext(!xIsNext)
     
     setSquares(nextSquares);
   }
+
+  function handleSquareMouseEnter(squareNumber) {
+    let position = getPostion(squareNumber);
+    let neighbourhood = getPointNeighbourhood(position, neighbourhoodDirections, size);
+    neighbourhood = neighbourhood.map(element => getSquareIndex(element));
+    console.log(neighbourhood);
+
+    const nextSquares = squares.slice();
+
+    for (let i = 0; i < neighbourhood.length; i++) {
+      let squareToChange = neighbourhood[i];
+      nextSquares[squareToChange].hovered = true;
+    }
+
+    setSquares(nextSquares);
+  }
+
+  function handleSquareMouseLeave(i) {
+    const nextSquares = squares.slice();
+    for(let i = 0; i < squares.length; i++) {
+      nextSquares[i].hovered = false;
+    }
+    setSquares(nextSquares);
+  }
+
+  // index into (x,y,z,...)
+  function getPostion(square) {
+    return convertBase(square, size, dimensionsNum);
+  }
+
   
+  // (x,y,z,...) into index
+  function getSquareIndex(position) {
+    let index = 0;
+    // square position is eg. index = x + n^2y + n^3z + ...
+    for (let i = 0; i < position.length; i++) {
+      index += position[i] * Math.pow(size,i);
+    }
+    return index;
+  }
+
+  // (x,y,z,...) into object
   function getSquare(position) {
     let index = 0;
     // square position is eg. index = x + n^2y + n^3z + ...
@@ -193,6 +234,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
 
   function decideWinner() {
     let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
+    //console.log(allPosibilites);
     let totalScoreA = 0;
     let totalScoreB = 0;
     for (let i = 0; i < allPosibilites.length; i++) {
@@ -206,6 +248,58 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   }
 
 
+  // converts unsigned integer into different base
+  function convertBase(number, base, dimensionsNum) {
+    let result = Array(dimensionsNum).fill(0);
+    if (number <= 0) {
+      return result;
+    }
+    let i = 0;
+    while(number != 0) {
+      result[i] = number % base;
+      number = Math.floor(number / base);
+      i += 1;
+    }
+    // result.reverse();
+    return result;
+  }
+  
+  function createNeighbourhoodVector(dimensionsNum) {
+    let i = 0;
+    let iterations = Math.pow(3, dimensionsNum);
+    let vector = Array(iterations);
+    while (i < iterations) {
+      let direction = convertBase(i,3,dimensionsNum); 
+      // to conver it into range -1, 0, 1
+      vector[i] = direction.map(element => element - 1);
+      i += 1;
+    }
+    return vector;
+  }
+
+
+  function getPointNeighbourhood(position, neighbourhood, boardSize) {
+    let result = Array(0);
+    for (let i = 0; i < neighbourhood.length; i++) {
+      let direction = neighbourhood[i];
+
+      let neighbour = Array();
+      let neighbourExist = true;
+      for (let j = 0; j < direction.length; j++) {
+        if (position[j] + direction[j] < 0 || position[j] + direction[j] > boardSize - 1) {
+          neighbourExist = false;
+          break;
+        }
+        neighbour.push(position[j] + direction[j]);
+      }
+
+      if (neighbourExist) {
+        result.push(neighbour);
+      }
+    }
+    return result;
+  }
+
 
   // game data 
   const size = boardSize;
@@ -213,9 +307,26 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   
   const squareCount = Math.pow(size,dimensionsNum);
   
-  const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => i));
+  const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => ({
+    id: i,
+    value: "",
+    hovered:false,
+  })));
+
+  useEffect(() => {
+    setSquares(prev =>
+      Array.from({ length: squareCount }, (_, i) =>
+        prev[i] ? prev[i] : { id: i, value: "", hovered: false }
+      )
+    );
+  }, [squareCount]);
+  
   const [xIsNext, setXIsNext] = useState(true);
   
+  const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
+  // console.log(neighbourhood);
+  // const pointNeighbourhood = getPointNeighbourhood([1,1], neighbourhood, 3)
+  // console.log(pointNeighbourhood);
   decideWinner();
 
   // Recursive function to group into nested grids
@@ -224,11 +335,17 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
       // Base case: last dimension → just render row of squares
       return (
         <GridHorizontal columns={size}>
-          {items.map((value, idx) => (
+          {items.map((square, idx) => (
             <Square
-              key={value}
-              value={squares[value]}
-              onSquareClick={() => handleSquareClick(value)}
+              key={square.id}
+              value={square.value}
+              onSquareClick={() => handleSquareClick(square.id)}
+              onSquareMouseEnter={() => handleSquareMouseEnter(square.id)}
+              onSquareMouseLeave={() => handleSquareMouseLeave(square.id)}
+              style={{
+                 backgroundColor: square.hovered ? "deepskyblue" : "lightblue",
+                 color: square.hovered ? "white" : "black",
+              }}
             />
           ))}
         </GridHorizontal>
@@ -301,7 +418,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     );
   }
 
-  const indices = Array.from({ length: squareCount }, (_, i) => i);
+  // const indices = Array.from({ length: squareCount }, (_, i) => i);
   return <div
     style={{
       width: "75%",            // take 80% of viewport width
@@ -312,7 +429,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
       minHeight: "100vh",      // make it fill screen height
       border: "1px solid black"
     }}>
-    {buildGrid(indices, dimensionsNum)}</div>;
+    {buildGrid(squares, dimensionsNum)}</div>;
 
 }
 

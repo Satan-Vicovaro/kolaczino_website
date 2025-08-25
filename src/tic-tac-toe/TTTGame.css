@@ -2,11 +2,9 @@
   width: 60px;
   height: 60px;
   line-height: 60px; /* 👈 prevents shifting */
-  background-color: #f0f0f0;
   border: 2px solid #333;
   font-size: 24px;
   font-weight: bold;
-  color: #333;
   cursor: pointer;
   margin: 2px;
   text-align: center;
