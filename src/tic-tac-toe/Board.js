@@ -9,9 +9,10 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     // if (squares[i]) {
     //   return;
     // }
+
     setScorePlayerA(scorePlayerA);
     setScorePlayerB(scorePlayerB);
-
+    
     const nextSquares = squares.slice();
     
     if (xIsNext) {
@@ -19,6 +20,9 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     } else {
       nextSquares[i].value = "O";
     }
+
+    decideWinner();
+    
     setXIsNext(!xIsNext)
     
     setSquares(nextSquares);
@@ -28,7 +32,6 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     let position = getPostion(squareNumber);
     let neighbourhood = getPointNeighbourhood(position, neighbourhoodDirections, size);
     neighbourhood = neighbourhood.map(element => getSquareIndex(element));
-    console.log(neighbourhood);
 
     const nextSquares = squares.slice();
 
@@ -140,6 +143,14 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
 
     return result;
   }
+
+  function generatePosibilitesToCheck2(dimensionNum, boardSize) {
+    let allDirections = createNeighbourhoodVector(dimensionNum);
+    let middleElementIndex = Math.floor(allDirections.length/2);
+    allDirections.splice(middleElementIndex,1); 
+    allDirections.splice(0,allDirections.length/2)
+    return allDirections;
+  }
   
   function seperateIndexes(direction, indexesToCheckDimension, indexesToShiftStartPoint) {
     direction.forEach((val, i) => {
@@ -192,7 +203,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   }
 
   function checkDimension(startPoint, indexesToCheckDimension) {
-    let player = getSquare(startPoint);
+    let player = getSquare(startPoint).value;
     // if (player === null || player === undefined) {
     //     return {filled: false, player:null}
     // }
@@ -200,7 +211,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
       return {filled: false, player:null}
     }
     for (let i = 0; i < size; i++) {
-      if (getSquare(startPoint) !== player) {
+      if (getSquare(startPoint).value !== player) {
         return {filled: false, player:player}
       }
 
@@ -233,8 +244,8 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   }
 
   function decideWinner() {
-    let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
-    //console.log(allPosibilites);
+    let allPosibilites = generatePosibilitesToCheck2(dimensionsNum,size);
+
     let totalScoreA = 0;
     let totalScoreB = 0;
     for (let i = 0; i < allPosibilites.length; i++) {
@@ -323,11 +334,13 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   
   const [xIsNext, setXIsNext] = useState(true);
   
-  const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
-  // console.log(neighbourhood);
-  // const pointNeighbourhood = getPointNeighbourhood([1,1], neighbourhood, 3)
-  // console.log(pointNeighbourhood);
-  decideWinner();
+  const neighbourhoodDirections = createNeighbourhoodVector(dimensionNum);
+
+  const posiblites1 = generatePosibilitesToCheck(dimensionNum,size);
+  console.log(posiblites1)
+  
+  const posiblites2 = generatePosibilitesToCheck2(dimensionNum,size);
+  console.log(posiblites2);
 
   // Recursive function to group into nested grids
   function buildGrid(items, depth) {

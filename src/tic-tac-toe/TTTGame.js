@@ -34,7 +34,8 @@ function TTTGame() {
       />
       
       <GameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} dimensionNum={dimensionNum} />  
-      <OptionSlider value={dimensionNum} setValue={setDimensionNum} max={6} min={1} />
+      <OptionSlider value={dimensionNum} setValue={setDimensionNum} max={6} min={2} />
+      <OptionSlider value={boardSize} setValue={setBoardSize} max={10} min={3} />
     </>
     ) 
 }
