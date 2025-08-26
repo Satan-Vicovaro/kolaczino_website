@@ -1,8 +1,7 @@
 import React from "react";
-import { useState, useRef, useEffect} from "react";
+import { useState, useEffect} from "react";
 import Square from "./Square";
-import { screen, waitFor } from "@testing-library/dom";
-import { wait } from "@testing-library/user-event/dist/utils";
+
 function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, dimensionNum ,boardSize,}) {
   function handleSquareClick(i) {
     //square is already taken 
@@ -77,74 +76,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     return squares[index];
   }
   
-  function pointsToCheck(dimensionsNum, size, result) {
-    
-    if (size == 0) {
-      return 0;
-    }
-    
-    pointsToCheck(dimensionsNum - 1, size, result);
-  }
-
-  function generateCombinations(result, currentOption, n, k) {
-    if (currentOption.length === n - k) {
-      // filling remaining space with 1's
-      for(let i = 0; i < k; i++) {
-        currentOption.push(1);
-      }
-      result.push(currentOption);
-      return;
-    }
-
-    if (k === 0) {
-      while(currentOption.length < n) {
-        currentOption.push(0);
-      }
-      result.push(currentOption);
-      return;
-    }
-
-    currentOption.push(0);
-    generateCombinations(result,currentOption.slice(),n,k);
-    currentOption.pop();
-
-    currentOption.push(1);
-    generateCombinations(result,currentOption.slice(),n,k-1);
-  }
-
-  function generatePosibilitesToCheck(dimensionsNum, size) {
-    let result = Array();
-    let firstDimension = Array();
-    generateCombinations(firstDimension, Array(),dimensionsNum,1);
-    result = result.concat(firstDimension);
-
-    for(let i = 2; i < dimensionsNum; i++) {
-      let dimensionResult = Array();
-      generateCombinations(dimensionResult,Array(),dimensionsNum,i);
-      let revertedDimension = structuredClone(dimensionResult);
-      revertedDimension.forEach((array, index) => {
-        for(let i = 0; i < array.length; i++) {
-          if (array[i] === 1) {
-            array[i] = -1;
-            break;
-          }
-        }
-      } )
-      dimensionResult = dimensionResult.concat(revertedDimension);
-      result = result.concat(dimensionResult);
-    }
-
-    // last dimension
-    for(let i = 0; i < dimensionsNum; i++) {
-      let lastDimension = Array(dimensionsNum).fill(1);
-      lastDimension[i] = -1;
-      result.push(lastDimension);
-    }
-
-    return result;
-  }
-
-  function generatePosibilitesToCheck2(dimensionNum, boardSize) {
+  function generatePosibilitesToCheck(dimensionNum) {
     let allDirections = createNeighbourhoodVector(dimensionNum);
     let middleElementIndex = Math.floor(allDirections.length/2);
     allDirections.splice(middleElementIndex,1); 
@@ -244,7 +176,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   }
 
   function decideWinner() {
-    let allPosibilites = generatePosibilitesToCheck2(dimensionsNum,size);
+    let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
 
     let totalScoreA = 0;
     let totalScoreB = 0;
@@ -311,36 +243,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     return result;
   }
 
-
-  // game data 
-  const size = boardSize;
-  const dimensionsNum = dimensionNum;
   
-  const squareCount = Math.pow(size,dimensionsNum);
-  
-  const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => ({
-    id: i,
-    value: "",
-    hovered:false,
-  })));
-
-  useEffect(() => {
-    setSquares(prev =>
-      Array.from({ length: squareCount }, (_, i) =>
-        prev[i] ? prev[i] : { id: i, value: "", hovered: false }
-      )
-    );
-  }, [squareCount]);
-  
-  const [xIsNext, setXIsNext] = useState(true);
-  
-  const neighbourhoodDirections = createNeighbourhoodVector(dimensionNum);
-
-  const posiblites1 = generatePosibilitesToCheck(dimensionNum,size);
-  console.log(posiblites1)
-  
-  const posiblites2 = generatePosibilitesToCheck2(dimensionNum,size);
-  console.log(posiblites2);
 
   // Recursive function to group into nested grids
   function buildGrid(items, depth) {
@@ -431,7 +334,29 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     );
   }
 
-  // const indices = Array.from({ length: squareCount }, (_, i) => i);
+  //--------------- game data --------------- 
+  const size = boardSize;
+  const dimensionsNum = dimensionNum;
+  
+  const squareCount = Math.pow(size,dimensionsNum);
+  
+  const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => ({
+    id: i,
+    value: "",
+    hovered:false,
+  })));
+
+  useEffect(() => {
+    setSquares(prev =>
+      Array.from({ length: squareCount }, (_, i) =>
+        prev[i] ? prev[i] : { id: i, value: "", hovered: false }
+      )
+    );
+  }, [squareCount]);
+  
+  const [xIsNext, setXIsNext] = useState(true);
+  const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
+
   return <div
     style={{
       width: "75%",            // take 80% of viewport width
