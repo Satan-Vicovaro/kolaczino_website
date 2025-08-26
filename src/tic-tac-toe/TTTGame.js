@@ -24,12 +24,15 @@ function TTTGame() {
   return (
     <div className="whole-content">
       <Section size={"3"}>
-        <Container size={"2"} >
-          <Box align="center" style={{background: "var(--gray-a2)", height:"200px"}} >
-            <Text as="p" size="8"> Welcome to the n-dimensional tick-tac-toe ! </Text>
-            <GameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} dimensionNum={dimensionNum} boardSize={boardSize}/>
-            <OptionSlider value={dimensionNum} setValue={setDimensionNum} max={6} min={2} />
-            <OptionSlider value={boardSize} setValue={setBoardSize} max={10} min={3} />
+        <Container size={"2"}>
+          <Box align="center"  style={{background: "var(--gray-a2)", display:"block", borderRadius: "var(--radius-3)", padding:"10px"}}>
+            <Text as="p" size="8"> Welcome to the n-dimensional tick-tac-toe !</Text>
+            <Section size="1"/>
+            <GameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB}
+                      dimensionNum={dimensionNum} setDimensionNum={setDimensionNum}
+                      setBoardSize={setBoardSize} boardSize={boardSize}
+            />
+            <Section size="1"/>
           </Box>
         </Container>
       </Section>

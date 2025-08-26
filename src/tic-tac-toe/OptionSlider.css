@@ -5,6 +5,7 @@
 	position: relative;
 	display: flex;
 	align-items: center;
+  justify-content: center;
 	user-select: none;
 	touch-action: none;
 	width: 200px;
@@ -27,15 +28,20 @@
 }
 
 .SliderThumb {
-	display: block;
+	display: flex;
 	width: 20px;
 	height: 20px;
 	background-color: white;
-	box-shadow: 0 2px 10px var(--black-a7);
+  color: var(--black-a10);
+  font-size: 18px;
+  align-items: center;
+  justify-content:center;
+	box-shadow: 0 2px 10px var(--black-a5);
 	border-radius: 10px;
 }
 .SliderThumb:hover {
 	background-color: var(--violet-3);
+  color: white;
 }
 .SliderThumb:focus {
 	outline: none;

@@ -1,25 +1,22 @@
-import { Text, Card, Grid } from "@radix-ui/themes";
+import { Text, Card, Grid, Strong } from "@radix-ui/themes";
 import React from "react";
-
-function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, boardSize} ) {
+import OptionSlider from "./OptionSlider";
+function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, setDimensionNum, boardSize, setBoardSize} ) {
 
   return (
   <>
-      <Grid columns="2" row="4" gap="4" width="auto">
-        <Card size="1">
-          <Text as="div" size="2" align="center"> Player "X" score: {scorePlayerA} </Text>
+      <Grid columns="2" row="4" gap="4" width="auto" height="auto">
+        <OptionSlider value={dimensionNum} setValue={setDimensionNum} max={6} min={2} text="Number of dimensions"/>
+        <OptionSlider value={boardSize} setValue={setBoardSize} max={10} min={3} text="Board size"/>
+        
+        <Card size="2">
+          <Text as="div" size="4" align="center"> Player <Strong> X </Strong> score: {scorePlayerA} </Text>
         </Card>
-
-        <Card size="1">
-          <Text as="div" size="2" align="center"> Player "O" score: {scorePlayerB} </Text>
-        </Card>
-        <Card size="1">
-          <Text as="div" size="2" align="center"> Number of dimensions: {dimensionNum} </Text>
-        </Card>
-        <Card size="1">
-          <Text as="div" size="2" align="center"> Board size: {boardSize} </Text>
+        <Card size="2">
+          <Text as="div" size="4" align="center"> Player <Strong> O </Strong> score: {scorePlayerB} </Text>
         </Card>
       </Grid>
+
     </>
   )
 }
