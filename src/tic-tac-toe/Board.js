@@ -360,13 +360,14 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
 
   return <div
     style={{
-      width: "75%",            // take 80% of viewport width
+      // width: "75%",         
       margin: "0 auto",        // center horizontally
       display: "flex",         // use flexbox for inner alignment
       justifyContent: "center",// center inner content horizontally
       alignItems: "center",    // center inner content vertically
-      minHeight: "100vh",      // make it fill screen height
-      border: "1px solid black"
+      minHeight: "75vh",      
+      minWidth: "100vh",      
+      border: "1px solid red"
     }}>
     {buildGrid(squares, dimensionsNum)}</div>;
 

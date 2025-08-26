@@ -1,12 +1,25 @@
+import { Text, Card, Grid } from "@radix-ui/themes";
 import React from "react";
 
-function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum} ) {
+function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, boardSize} ) {
 
   return (
   <>
-    <p1> {scorePlayerA} </p1>
-    <p2> {scorePlayerB} </p2>
-    <p3> {dimensionNum} </p3>
+      <Grid columns="2" row="4" gap="4" width="auto">
+        <Card size="1">
+          <Text as="div" size="2" align="center"> Player "X" score: {scorePlayerA} </Text>
+        </Card>
+
+        <Card size="1">
+          <Text as="div" size="2" align="center"> Player "O" score: {scorePlayerB} </Text>
+        </Card>
+        <Card size="1">
+          <Text as="div" size="2" align="center"> Number of dimensions: {dimensionNum} </Text>
+        </Card>
+        <Card size="1">
+          <Text as="div" size="2" align="center"> Board size: {boardSize} </Text>
+        </Card>
+      </Grid>
     </>
   )
 }

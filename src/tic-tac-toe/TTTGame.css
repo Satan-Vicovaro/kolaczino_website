@@ -11,4 +11,24 @@
   vertical-align: middle;
   padding: 0;
 }
+  
+.whole-content {
+  border: 2px solid purple;
+}
 
+.transform-container{
+  border: 2px solid lightseagreen;
+  display: flex;
+  align-items: center;   /* centers content vertically */
+  justify-content: center; /* centers content horizontally */
+  overflow: hidden;
+  
+}
+
+.board-container{
+  border: 2px solid orangered;
+  overflow: hidden;
+  align-items: center;   /* centers content vertically */
+  justify-content: center; /* centers content horizontally */
+  overflow: hidden;
+}

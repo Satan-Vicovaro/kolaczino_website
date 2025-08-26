@@ -9,12 +9,19 @@ import ZoomTest from './components/ZoomTest';
 
 function App() {
   return (
-    <Theme accentColor="crimson" grayColor="sand" radius="large" scaling="95%">
+    <Theme
+      accentColor="orange"
+      grayColor="gray"
+      panelBackground="translucent"
+      scaling="100%"
+      radius="full"
+      appearance="dark"
+    >
       <div className="App">
         <TTTGame />
-        <ZoomTest />
+        {/* <ZoomTest /> */}
       </div>
-      <MainContent/>
+      <MainContent />
     </Theme>
 
   );
