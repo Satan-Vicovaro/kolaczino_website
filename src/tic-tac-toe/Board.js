@@ -191,6 +191,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   }
 
 
+
   // converts unsigned integer into different base
   function convertBase(number, base, dimensionsNum) {
     let result = Array(dimensionsNum).fill(0);
