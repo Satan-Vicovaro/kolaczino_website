@@ -40,7 +40,7 @@
 	border-radius: 10px;
 }
 .SliderThumb:hover {
-	background-color: var(--violet-3);
+	background-color: var(--orange-10);
   color: white;
 }
 .SliderThumb:focus {

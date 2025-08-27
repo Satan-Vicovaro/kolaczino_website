@@ -26,7 +26,7 @@
 }
 
 .board-container{
-  border: 2px solid orangered;
+  border: 2px solid green;
   overflow: hidden;
   align-items: center;   /* centers content vertically */
   justify-content: center; /* centers content horizontally */

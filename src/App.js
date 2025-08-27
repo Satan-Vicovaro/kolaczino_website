@@ -4,7 +4,7 @@ import MainContent from "./components/MainContent"
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import TTTGame from './tic-tac-toe/TTTGame';
-import { Theme } from '@radix-ui/themes';
+import { Box, Theme } from '@radix-ui/themes';
 import ZoomTest from './components/ZoomTest';
 
 function App() {
@@ -17,10 +17,10 @@ function App() {
       radius="full"
       appearance="dark"
     >
-      <div className="App">
+      <Box className="App">
         <TTTGame />
         {/* <ZoomTest /> */}
-      </div>
+      </Box>
       <MainContent />
     </Theme>
 
