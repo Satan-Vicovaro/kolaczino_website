@@ -1,12 +1,27 @@
 import React from "react";  
 import { useState } from "react";
 
-function Square({value, onSquareClick, onSquareMouseEnter, onSquareMouseLeave, style}) {
+function Square({value, onSquareClick, onSquareMouseEnter, onSquareMouseLeave, hovered }) {
+  
+  const colors = ["#F97E1B", "#1B96F9","var(--gray-a10)","#FBA35C", "#5CB4FB", "var(--gray-a5)"];
 
   function handleClick() {
-    console.log("clicked: " + {value});
+    onSquareClick();
+    console.log(colorIndex);
   }
 
+  let colorIndex;
+  if (hovered) {
+    if (value === "X") colorIndex = 4;
+    else if (value === "O") colorIndex = 3;
+    else colorIndex = 2;
+  } else {
+    if (value === "X") colorIndex = 1;
+    else if (value === "O") colorIndex = 0;
+    else colorIndex = 5;
+  }
+
+  
   return (
     <button
       onClick={onSquareClick}
@@ -14,7 +29,10 @@ function Square({value, onSquareClick, onSquareMouseEnter, onSquareMouseLeave, s
       className="square"
       onMouseEnter={onSquareMouseEnter}
       onMouseLeave={onSquareMouseLeave}
-      style = {style}
+      style={{
+        backgroundColor: colors[colorIndex],
+        color: hovered ? "white" : "black",
+      }}
     > 
       {value}
     </button>

@@ -21,7 +21,7 @@ function App() {
         <TTTGame />
         {/* <ZoomTest /> */}
       </Box>
-      <MainContent />
+      {/* <MainContent /> */}
     </Theme>
 
   );

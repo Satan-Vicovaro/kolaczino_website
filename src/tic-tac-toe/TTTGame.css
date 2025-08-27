@@ -27,8 +27,12 @@
 
 .board-container{
   border: 2px solid green;
-  overflow: hidden;
-  align-items: center;   /* centers content vertically */
-  justify-content: center; /* centers content horizontally */
-  overflow: hidden;
+  width: 700px;
+  height: 700px;
+  display: flex;
+  background:var(--gray-a4);
+  /* overflow: hidden; */
+  /* align-items: center;   /* centers content vertically */ 
+  /* justify-content: center; /* centers content horizontally */ 
+  /* overflow: hidden; */
 }

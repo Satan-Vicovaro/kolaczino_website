@@ -7,7 +7,6 @@ export default () => (
 		<Toolbar.Button> <ZoomInIcon /> </Toolbar.Button>
 		<Toolbar.Button> <ZoomOutIcon /> </Toolbar.Button>
 		<Toolbar.Button> <ResetIcon /> </Toolbar.Button>
-		<Toolbar.Button>O</Toolbar.Button>
 	</Toolbar.Root>
 );
 

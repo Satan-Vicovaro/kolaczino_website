@@ -1,3 +1,4 @@
+import { Theme } from "@radix-ui/themes";
 import React from "react";
 import { useState, useEffect} from "react";
 import Square from "./Square";
@@ -251,7 +252,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     if (depth === 1) {
       // Base case: last dimension → just render row of squares
       return (
-        <GridHorizontal columns={size}>
+        <GridHorizontal columns={size} gap={4}>
           {items.map((square, idx) => (
             <Square
               key={square.id}
@@ -259,6 +260,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
               onSquareClick={() => handleSquareClick(square.id)}
               onSquareMouseEnter={() => handleSquareMouseEnter(square.id)}
               onSquareMouseLeave={() => handleSquareMouseLeave(square.id)}
+              hovered = {square.hovered}
               style={{
                  backgroundColor: square.hovered ? "deepskyblue" : "lightblue",
                  color: square.hovered ? "white" : "black",
@@ -278,7 +280,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
 
     if (depth === 2 || depth === 3) {
       return (
-       <GridVertical rows={size} gap="10px">
+       <GridVertical rows={size} gap = {4*depth*depth}>
           {groups.map((group, idx) => (
             <div key={idx}>{buildGrid(group, depth - 1)}</div>
           ))}
@@ -288,15 +290,15 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   
     if ((depth) % 2 === 0) {
       return (
-        <GridHorizontal columns={size} gap="10px">
+        <GridHorizontal columns={size} gap = {4*depth*depth}>
           {groups.map((group, idx) => (
-            <div key={idx}>{buildGrid(group, depth - 1)}</div>
+            <div key={idx} >{buildGrid(group, depth - 1)}</div>
           ))}
         </GridHorizontal>
       );
     } else {
       return (
-        <GridVertical rows={size} gap="10px">
+        <GridVertical rows={size} gap = {4*depth*depth}>
           {groups.map((group, idx) => (
             <div key={idx}>{buildGrid(group, depth - 1)}</div>
           ))}
@@ -305,7 +307,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     }
   }
   
-  function GridVertical({rows, gap = "2px", children }) {
+  function GridVertical({rows, gap = "1px", children }) {
     return (
       <div
         style={{
@@ -320,7 +322,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
     );
   }
 
-  function GridHorizontal({ columns, gap = "2px", children }) {
+  function GridHorizontal({ columns, gap = "1px", children }) {
     return (
       <div
         style={{
@@ -340,6 +342,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   const dimensionsNum = dimensionNum;
   
   const squareCount = Math.pow(size,dimensionsNum);
+  console.log("Square Count: %d", squareCount)
   
   const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => ({
     id: i,
@@ -358,18 +361,20 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   const [xIsNext, setXIsNext] = useState(true);
   const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
 
-  return <div
-    style={{
-      // width: "75%",         
-      margin: "0 auto",        // center horizontally
-      display: "flex",         // use flexbox for inner alignment
-      justifyContent: "center",// center inner content horizontally
-      alignItems: "center",    // center inner content vertically
-      minHeight: "75vh",      
-      minWidth: "100vh",      
-      border: "1px solid red"
-    }}>
-    {buildGrid(squares, dimensionsNum)}</div>;
+  return (
+      <div
+        style={{
+          // width: "75%",         
+          margin: "0 auto",        // center horizontally
+          display: "flex",         // use flexbox for inner alignment
+          justifyContent: "center",// center inner content horizontally
+          alignItems: "center",    // center inner content vertically
+          // minHeight: "75vh",      
+          // minWidth: "100vh",      
+          border: "1px solid red"
+        }}>
+        {buildGrid(squares, dimensionsNum)}</div>
+  );
 
 }
 

@@ -49,7 +49,7 @@ function TTTGame() {
             height: "1000px",
           }}>
             <TransformWrapper
-              minScale={0.5}
+              minScale={0.2}
               initialScale={1}
               limitToBounds={false}
             >
@@ -64,23 +64,25 @@ function TTTGame() {
                     paddingBottom: "5px",
                     borderRadius: "var(--radius-3)"
                   }}>
-                    <Toolbar.Root>
-                      <Toolbar.Button onClick={() => zoomIn()}> <ZoomInIcon /> </Toolbar.Button>
-                      <Toolbar.Button onClick={() => zoomOut()}> <ZoomOutIcon /> </Toolbar.Button>
-                      <Toolbar.Button onClick={() => resetTransform()}> <ResetIcon /> </Toolbar.Button>
+                    <Toolbar.Root style={{display:"flex", gap:"10px"}}>
+                      <Toolbar.Button onClick={() => zoomIn()}> <ZoomInIcon width={32} height={32} /> </Toolbar.Button>
+                      <Toolbar.Button onClick={() => zoomOut()}> <ZoomOutIcon width={32} height={32} /> </Toolbar.Button>
+                      <Toolbar.Button onClick={() => resetTransform()}> <ResetIcon width={32} height={32}/> </Toolbar.Button>
                     </Toolbar.Root>
                   </Box>
-                  <TransformComponent wrapperClass="board-container">
-                    <Board
-                      scorePlayerA={scorePlayerA}
-                      scorePlayerB={scorePlayerB}
+                  <TransformComponent  wrapperClass="board-container">
+                    <Box style={{width:"1000px", height:"1000px", display:"inline-flex" ,background:"var(--gray-a2)"}}>
+                      <Board
+                        scorePlayerA={scorePlayerA}
+                        scorePlayerB={scorePlayerB}
 
-                      setScorePlayerA={setScorePlayerA}
-                      setScorePlayerB={setScorePlayerB}
+                        setScorePlayerA={setScorePlayerA}
+                        setScorePlayerB={setScorePlayerB}
 
-                      dimensionNum={dimensionNum[0]}
-                      boardSize={boardSize}
-                    />
+                        dimensionNum={dimensionNum[0]}
+                        boardSize={boardSize}
+                      />
+                    </Box>
                   </TransformComponent>
                 </Box>
               )}
