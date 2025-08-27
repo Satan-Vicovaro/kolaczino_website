@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function Square({value, onSquareClick, onSquareMouseEnter, onSquareMouseLeave, hovered }) {
   
-  const colors = ["#F97E1B", "#1B96F9","var(--gray-a10)","#FBA35C", "#5CB4FB", "var(--gray-a5)"];
+  const colors = ["#F97E1B", "#1B96F9","var(--gray-a11)","#FBA35C", "#5CB4FB", "var(--gray-a8)"];
 
   function handleClick() {
     onSquareClick();

@@ -11,13 +11,14 @@
   vertical-align: middle;
   padding: 0;
 }
+
   
 .whole-content {
-  border: 2px solid purple;
+  /* border: 2px solid purple; */
 }
 
 .transform-container{
-  border: 2px solid lightseagreen;
+  /* border: 2px solid lightseagreen; */
   display: flex;
   align-items: center;   /* centers content vertically */
   justify-content: center; /* centers content horizontally */
@@ -26,13 +27,8 @@
 }
 
 .board-container{
-  border: 2px solid green;
-  width: 700px;
-  height: 700px;
-  display: flex;
+  /* border: 2px solid green; */
+  display: block;
   background:var(--gray-a4);
-  /* overflow: hidden; */
-  /* align-items: center;   /* centers content vertically */ 
-  /* justify-content: center; /* centers content horizontally */ 
-  /* overflow: hidden; */
+  border-radius:var(--radius-3);
 }

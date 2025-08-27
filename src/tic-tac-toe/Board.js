@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect} from "react";
 import Square from "./Square";
 
-function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, dimensionNum ,boardSize,}) {
+function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, dimensionNum ,boardSize, actualBoardDivRef }) {
   function handleSquareClick(i) {
     //square is already taken 
     // if (squares[i]) {
@@ -261,10 +261,6 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
               onSquareMouseEnter={() => handleSquareMouseEnter(square.id)}
               onSquareMouseLeave={() => handleSquareMouseLeave(square.id)}
               hovered = {square.hovered}
-              style={{
-                 backgroundColor: square.hovered ? "deepskyblue" : "lightblue",
-                 color: square.hovered ? "white" : "black",
-              }}
             />
           ))}
         </GridHorizontal>
@@ -362,6 +358,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
 
   return (
+    <div ref={actualBoardDivRef} style={{display: "inline-block"}} >
       <div
         style={{
           // width: "75%",         
@@ -371,10 +368,11 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
           alignItems: "center",    // center inner content vertically
           // minHeight: "75vh",      
           // minWidth: "100vh",      
-          border: "1px solid red"
         }}>
         {buildGrid(squares, dimensionsNum)}</div>
+    </div>
   );
+
 
 }
 
