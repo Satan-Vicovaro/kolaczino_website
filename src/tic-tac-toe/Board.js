@@ -3,12 +3,14 @@ import React from "react";
 import { useState, useEffect} from "react";
 import Square from "./Square";
 
-function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, dimensionNum ,boardSize, actualBoardDivRef }) {
+function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
+                dimensionNum ,boardSize, actualBoardDivRef, disableCenterPoint,
+                resetBoard, setResetBoard}) {
   function handleSquareClick(i) {
     //square is already taken 
-    // if (squares[i]) {
-    //   return;
-    // }
+    if (squares[i].value !== "") {
+      return;
+    }
 
     setScorePlayerA(scorePlayerA);
     setScorePlayerB(scorePlayerB);
@@ -338,7 +340,6 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
   const dimensionsNum = dimensionNum;
   
   const squareCount = Math.pow(size,dimensionsNum);
-  console.log("Square Count: %d", squareCount)
   
   const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => ({
     id: i,
@@ -353,27 +354,49 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB, di
       )
     );
   }, [squareCount]);
+
+  useEffect(() => {
+    if (resetBoard) {
+      setSquares(
+        Array.from({ length: squareCount }, (_, i) => ({
+          id: i,
+          value: "",
+          hovered: false,
+        }))
+      );
+      setResetBoard(false);
+      setScorePlayerA(0);
+      setScorePlayerB(0);
+    }
+  }, [resetBoard, squareCount]);
+
+  useEffect(() => {
+    if (disableCenterPoint) {
+      const centerIndex = Math.floor((squareCount - 1) / 2);
+
+      setSquares(prev =>
+        prev.map((sq, i) =>
+          i === centerIndex ? { ...sq, value: " " } : sq
+        )
+      );
+    }
+  }, [disableCenterPoint, squareCount]);  // rerun when these change
   
   const [xIsNext, setXIsNext] = useState(true);
   const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
-
+  
   return (
     <div ref={actualBoardDivRef} style={{display: "inline-block"}} >
       <div
         style={{
-          // width: "75%",         
           margin: "0 auto",        // center horizontally
           display: "flex",         // use flexbox for inner alignment
           justifyContent: "center",// center inner content horizontally
           alignItems: "center",    // center inner content vertically
-          // minHeight: "75vh",      
-          // minWidth: "100vh",      
         }}>
         {buildGrid(squares, dimensionsNum)}</div>
     </div>
   );
-
-
 }
 
 export default Board;

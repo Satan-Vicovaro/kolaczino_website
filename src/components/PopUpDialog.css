@@ -1,0 +1,37 @@
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/themes/tokens/base.css";
+@import "@radix-ui/colors/green.css";
+
+.AlertDialogOverlay {
+	background-color: var(--black-a9);
+	position: fixed;
+	inset: 0;
+	animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.AlertDialogContent {
+  background: var(--white-a12);
+  color: black;
+  box-shadow: var(--shadow-6);
+  border-radius: 8px; 
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.AlertDialogContent:focus {
+	outline: none;
+}
+
+.rt-Button.AlertDialogApplyButton {
+  background-color: var(--orange-9);
+}
+
+.rt-Button.AlertDialogCancelButton {
+
+  background-color: var(--orange-9);
+}
+

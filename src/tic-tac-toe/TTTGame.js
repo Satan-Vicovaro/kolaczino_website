@@ -2,20 +2,24 @@ import React, { useState, useRef, useEffect } from "react"
 import Board from "./Board"
 import GameInfo from "./GameInfo"
 import "./TTTGame.css"
-import OptionSlider from "./OptionSlider"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Box, Button, Container, Section, Text, Flex, Menubar } from "@radix-ui/themes"
 import { Toolbar } from "radix-ui";
-import { MinusIcon, PlusIcon, ResetIcon, ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
-import ZoomMenubar from "./ZoomMenubar"
+import { ResetIcon, ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
 
 function TTTGame() {
-
+  
+  function onResetButtonClick() {
+    setResetBoard(true);
+  }
+  
   let [scorePlayerA, setScorePlayerA] = useState(0);
   let [scorePlayerB, setScorePlayerB] = useState(0);
   
   let [dimensionNum, setDimensionNum] = useState([2]);
   let [boardSize, setBoardSize] = useState([3]);
+  let [disableMiddleElement, setDisableMiddleElement] = useState(false);
+  let [resetBoard, setResetBoard] = useState(false);
 
   const [size, setSize] = useState({ width: 1000, height: 1000 });
   const movableBoardDivRef = useRef(null);
@@ -26,7 +30,7 @@ function TTTGame() {
     // resizes component if its dimensions are greater than 1000
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        let newDimensions = {width:0,height:0}
+        let newDimensions = {width:0, height:0}
         if (entry.contentRect.width > 1000) {
           newDimensions.width = entry.contentRect.width;
         } else {
@@ -57,6 +61,9 @@ function TTTGame() {
             <GameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB}
                       dimensionNum={dimensionNum} setDimensionNum={setDimensionNum}
                       setBoardSize={setBoardSize} boardSize={boardSize}
+                      resetButtonClick={onResetButtonClick}
+                      setDisableMiddleElement={setDisableMiddleElement}
+                      disableCetralElement={disableMiddleElement}              
             />
             <Section size="1" />
           </Box>
@@ -116,6 +123,10 @@ function TTTGame() {
                         boardSize={boardSize}
 
                         actualBoardDivRef={actualBoardDivRef}
+
+                        disableCenterPoint={disableMiddleElement}
+                        resetBoard={resetBoard}
+                        setResetBoard={setResetBoard}
                       />
                     </Box>
                   </TransformComponent>
