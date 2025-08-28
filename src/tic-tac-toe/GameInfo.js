@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Card, Grid, Strong, Button, Switch, Box, Flex} from "@radix-ui/themes";
+import { Text, Card, Grid, Strong, Button, Switch, Section} from "@radix-ui/themes";
 import OptionSlider from "./OptionSlider";
 import "./GameInfo.css";
 import PopUpDialog from "../components/PopUpDialog";
@@ -14,30 +14,14 @@ function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, setDimensionNum,
       setDimensionNum(localDimensionNum);
       setBoardSize(localBoardSize);
       setDisableMiddleElement(localDisableCetralElement && switchEnabled);
-      console.log(`switchEnabled: ${switchEnabled}`);
     } else {
       setOpen(true)
     }
     if (localBoardSize !== boardSize || localDimensionNum !== dimensionNum || localDisableCetralElement !== disableCetralElement) {
-      console.log("somthing changed reseting");
       setDisableMiddleElement(localDisableCetralElement && switchEnabled);
       resetButtonClick();
     }
   }
-  
-  const [localBoardSize, setLocalBoardSize] = useState(boardSize);
-  const [localDimensionNum, setLocalDimensionNum] = useState(dimensionNum);
-  const [localDisableCetralElement,setLocalDisableCetralElement] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [switchEnabled, setSwitchEnabled] = useState(false);
-  
-  useEffect(() => {
-    if (localBoardSize % 2 === 1) {
-      setSwitchEnabled(true);
-    } else {
-      setSwitchEnabled(false);
-    }
-  }, [localBoardSize]) 
 
   function handleDimensionSlider(newValue) {
     setLocalDimensionNum(newValue);
@@ -58,10 +42,23 @@ function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, setDimensionNum,
       setDisableMiddleElement(localDisableCetralElement && switchEnabled);
   }
     
+  const [localBoardSize, setLocalBoardSize] = useState(boardSize);
+  const [localDimensionNum, setLocalDimensionNum] = useState(dimensionNum);
+  const [localDisableCetralElement,setLocalDisableCetralElement] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [switchEnabled, setSwitchEnabled] = useState(false);
+  
+  useEffect(() => {
+    if (localBoardSize % 2 === 1) {
+      setSwitchEnabled(true);
+    } else {
+      setSwitchEnabled(false);
+    }
+  }, [localBoardSize]) 
   
   return (
   <>
-      <Grid columns="2" row="4" gap="4" width="auto" height="auto">
+      <Grid columns="2" row="2" gap="4" width="auto" height="auto">
         <OptionSlider value={localDimensionNum} setValue={handleDimensionSlider} max={6} min={2} text="Number of dimensions"/>
         <OptionSlider value={localBoardSize} setValue={handleBoardSizeSlider} max={10} min={3} text="Board size"/>
         
@@ -82,10 +79,6 @@ function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, setDimensionNum,
           }}
           />
         </Card>
-
-        <Button onClick={resetButtonClick}> Reset </Button>
-        <Button onClick={applyButtonClick}> Apply </Button>
-        
         <PopUpDialog open={open} setOpen={setOpen}
           
           description={
@@ -101,6 +94,11 @@ function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, setDimensionNum,
           handleConfirm={handleConfirm}
         />
       </Grid>
+      <Section size="1"> </Section>
+        <Grid columns="2" row="2" gap="4" width="auto" height="auto">
+          <Button size="4" onClick={resetButtonClick}> Reset </Button>
+          <Button size="4" onClick={applyButtonClick}> Apply </Button>
+        </Grid>
     </>
   )
 }
