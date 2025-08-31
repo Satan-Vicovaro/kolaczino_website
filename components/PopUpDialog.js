@@ -1,3 +1,4 @@
+"use client";
 import React from "react"
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { Button, Card, Theme } from "@radix-ui/themes";
@@ -15,7 +16,9 @@ function PopUpDialog({ open, setOpen, description,  handleCancel,handleConfirm, 
         <Theme>
           <AlertDialog.Overlay className="AlertDialogOverlay" />
           <AlertDialog.Content
-            className="AlertDialogContent">
+            className="AlertDialogContent"
+            style={{zIndex: 9999}}
+          >
             <AlertDialog.Title className="AlertDialogTitle">
               {title}
             </AlertDialog.Title>
