@@ -1,0 +1,4 @@
+@radix-ui/themes
+@react-zoom-pan-pinch
+@radix-ui/react-icons
+

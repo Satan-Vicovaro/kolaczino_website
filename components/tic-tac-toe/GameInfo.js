@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Text, Card, Grid, Strong, Button, Switch, Section} from "@radix-ui/themes";
+import { Text, Card, Grid, Strong, Button, Switch,Section} from "@radix-ui/themes";
 import OptionSlider from "./OptionSlider";
 import "./GameInfo.css";
-import PopUpDialog from "../components/PopUpDialog";
+import PopUpDialog from "../PopUpDialog";
 function GameInfo( {scorePlayerA, scorePlayerB, dimensionNum, setDimensionNum,
                     boardSize, setBoardSize, resetButtonClick,
                     setDisableMiddleElement, disableCetralElement}){

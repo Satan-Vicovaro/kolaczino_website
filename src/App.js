@@ -1,11 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
-import MainContent from "./components/MainContent" 
-import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import TTTGame from './tic-tac-toe/TTTGame';
-import { Theme } from '@radix-ui/themes';
-import ZoomTest from './components/ZoomTest';
+import { Box, Theme } from '@radix-ui/themes';
 
 function App() {
   return (
@@ -17,11 +13,10 @@ function App() {
       radius="full"
       appearance="dark"
     >
-      <div className="App">
+      <Box className="App">
         <TTTGame />
-        {/* <ZoomTest /> */}
-      </div>
-      <MainContent />
+        <Footer /> 
+      </Box>
     </Theme>
 
   );
