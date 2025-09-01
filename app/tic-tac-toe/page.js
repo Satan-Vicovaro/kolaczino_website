@@ -8,9 +8,6 @@ import Footer from "@/components/Footer";
 
 export default function Game() {
   return (
-      <Box className="App">
-        <TTTGame />
-        <Footer />
-      </Box>
+    <TTTGame />
   )
 }

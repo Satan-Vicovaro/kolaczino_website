@@ -1,11 +1,11 @@
 import { Theme } from "@radix-ui/themes";
 import React from "react";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Square from "./Square";
 
-function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
-                dimensionNum ,boardSize, actualBoardDivRef, disableCenterPoint,
-                resetBoard, setResetBoard}) {
+function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
+  dimensionNum, boardSize, actualBoardDivRef, disableCenterPoint,
+  resetBoard, setResetBoard }) {
   function handleSquareClick(i) {
     //square is already taken 
     if (squares[i].value !== "") {
@@ -14,9 +14,9 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
 
     setScorePlayerA(scorePlayerA);
     setScorePlayerB(scorePlayerB);
-    
+
     const nextSquares = squares.slice();
-    
+
     if (xIsNext) {
       nextSquares[i].value = "X";
     } else {
@@ -24,9 +24,9 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     }
 
     decideWinner();
-    
+
     setXIsNext(!xIsNext)
-    
+
     setSquares(nextSquares);
   }
 
@@ -47,7 +47,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
 
   function handleSquareMouseLeave(i) {
     const nextSquares = squares.slice();
-    for(let i = 0; i < squares.length; i++) {
+    for (let i = 0; i < squares.length; i++) {
       nextSquares[i].hovered = false;
     }
     setSquares(nextSquares);
@@ -58,13 +58,13 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     return convertBase(square, size, dimensionsNum);
   }
 
-  
+
   // (x,y,z,...) into index
   function getSquareIndex(position) {
     let index = 0;
     // square position is eg. index = x + n^2y + n^3z + ...
     for (let i = 0; i < position.length; i++) {
-      index += position[i] * Math.pow(size,i);
+      index += position[i] * Math.pow(size, i);
     }
     return index;
   }
@@ -74,26 +74,26 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     let index = 0;
     // square position is eg. index = x + n^2y + n^3z + ...
     for (let i = 0; i < position.length; i++) {
-      index += position[i] * Math.pow(size,i);
+      index += position[i] * Math.pow(size, i);
     }
     return squares[index];
   }
-  
+
   function generatePosibilitesToCheck(dimensionNum) {
     let allDirections = createNeighbourhoodVector(dimensionNum);
-    let middleElementIndex = Math.floor(allDirections.length/2);
-    allDirections.splice(middleElementIndex,1); 
-    allDirections.splice(0,allDirections.length/2)
+    let middleElementIndex = Math.floor(allDirections.length / 2);
+    allDirections.splice(middleElementIndex, 1);
+    allDirections.splice(0, allDirections.length / 2)
     return allDirections;
   }
-  
+
   function seperateIndexes(direction, indexesToCheckDimension, indexesToShiftStartPoint) {
     direction.forEach((val, i) => {
       if (val === 1) {
-       indexesToCheckDimension.push({index: i, mode:'I'}); // increase that index
+        indexesToCheckDimension.push({ index: i, mode: 'I' }); // increase that index
       }
       else if (val === -1) {
-       indexesToCheckDimension.push({index: i, mode:'D'}); // decrease that index (size - i)
+        indexesToCheckDimension.push({ index: i, mode: 'D' }); // decrease that index (size - i)
       } else if (val === 0) {
         indexesToShiftStartPoint.push(i);
       }
@@ -121,7 +121,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     let scoreB = 0;
     while (curIteration < maxIteration) {
       let lineStatus = checkDimension(startPoint.slice(), indexesToCheckDimension);
-      
+
       if (lineStatus.filled) {
         if (lineStatus.player === "X") {
           scoreA += 1;
@@ -130,11 +130,11 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
         }
       }
 
-      curIteration +=1;
+      curIteration += 1;
       shiftStartPoint(startPoint, indexesToShiftStartPoint, curIteration);
     }
-    
-    return {scoreA, scoreB}
+
+    return { scoreA, scoreB }
   }
 
   function checkDimension(startPoint, indexesToCheckDimension) {
@@ -142,12 +142,12 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     // if (player === null || player === undefined) {
     //     return {filled: false, player:null}
     // }
-    if (!(player ==="X" || player ==="O")) {
-      return {filled: false, player:null}
+    if (!(player === "X" || player === "O")) {
+      return { filled: false, player: null }
     }
     for (let i = 0; i < size; i++) {
       if (getSquare(startPoint).value !== player) {
-        return {filled: false, player:player}
+        return { filled: false, player: player }
       }
 
       indexesToCheckDimension.forEach((val) => {
@@ -158,20 +158,20 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
         }
       });
     }
-    return {filled: true, player:player}
+    return { filled: true, player: player }
   }
 
   function shiftStartPoint(point, indexesToShiftStartPoint, curIteration) {
     let devisor = size;
     let newCoordinates = Array(dimensionsNum).fill(0);
-    
+
     let i = 0;
-    while(curIteration !== 0) {
-      newCoordinates[i] = curIteration%devisor;
+    while (curIteration !== 0) {
+      newCoordinates[i] = curIteration % devisor;
       curIteration = Math.floor(curIteration / devisor); // curIteration /= devisor xD
       i += 1;
     }
-    
+
     for (let i = 0; i < indexesToShiftStartPoint.length; i++) {
       let index = indexesToShiftStartPoint[i];
       point[index] = newCoordinates[i];
@@ -179,16 +179,16 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
   }
 
   function decideWinner() {
-    let allPosibilites = generatePosibilitesToCheck(dimensionsNum,size);
+    let allPosibilites = generatePosibilitesToCheck(dimensionsNum, size);
 
     let totalScoreA = 0;
     let totalScoreB = 0;
     for (let i = 0; i < allPosibilites.length; i++) {
       let direction = allPosibilites[i];
-      const {scoreA, scoreB} = checkLoop(direction);
+      const { scoreA, scoreB } = checkLoop(direction);
       totalScoreA += scoreA;
       totalScoreB += scoreB;
-    }  
+    }
     setScorePlayerA(totalScoreA);
     setScorePlayerB(totalScoreB);
   }
@@ -202,7 +202,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
       return result;
     }
     let i = 0;
-    while(number != 0) {
+    while (number != 0) {
       result[i] = number % base;
       number = Math.floor(number / base);
       i += 1;
@@ -210,13 +210,13 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     // result.reverse();
     return result;
   }
-  
+
   function createNeighbourhoodVector(dimensionsNum) {
     let i = 0;
     let iterations = Math.pow(3, dimensionsNum);
     let vector = Array(iterations);
     while (i < iterations) {
-      let direction = convertBase(i,3,dimensionsNum); 
+      let direction = convertBase(i, 3, dimensionsNum);
       // to conver it into range -1, 0, 1
       vector[i] = direction.map(element => element - 1);
       i += 1;
@@ -247,7 +247,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     return result;
   }
 
-  
+
 
   // Recursive function to group into nested grids
   function buildGrid(items, depth) {
@@ -262,7 +262,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
               onSquareClick={() => handleSquareClick(square.id)}
               onSquareMouseEnter={() => handleSquareMouseEnter(square.id)}
               onSquareMouseLeave={() => handleSquareMouseLeave(square.id)}
-              hovered = {square.hovered}
+              hovered={square.hovered}
             />
           ))}
         </GridHorizontal>
@@ -278,17 +278,17 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
 
     if (depth === 2 || depth === 3) {
       return (
-       <GridVertical rows={size} gap = {4*depth*depth}>
+        <GridVertical rows={size} gap={4 * depth * depth}>
           {groups.map((group, idx) => (
             <div key={idx}>{buildGrid(group, depth - 1)}</div>
           ))}
         </GridVertical>
       );
     }
-  
+
     if ((depth) % 2 === 0) {
       return (
-        <GridHorizontal columns={size} gap = {4*depth*depth}>
+        <GridHorizontal columns={size} gap={4 * depth * depth}>
           {groups.map((group, idx) => (
             <div key={idx} >{buildGrid(group, depth - 1)}</div>
           ))}
@@ -296,7 +296,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
       );
     } else {
       return (
-        <GridVertical rows={size} gap = {4*depth*depth}>
+        <GridVertical rows={size} gap={4 * depth * depth}>
           {groups.map((group, idx) => (
             <div key={idx}>{buildGrid(group, depth - 1)}</div>
           ))}
@@ -304,15 +304,15 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
       );
     }
   }
-  
-  function GridVertical({rows, gap = "1px", children }) {
+
+  function GridVertical({ rows, gap = "1px", children }) {
     return (
       <div
         style={{
           display: "grid",
           gridTemplateRows: `repeat(${rows}, auto)`,
           gap,
-          border:"1px solid black",
+          border: "1px solid black",
         }}
       >
         {children}
@@ -327,7 +327,7 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
           display: "grid",
           gridTemplateColumns: `repeat(${columns}, auto)`,
           gap,
-          border:"1px solid black",
+          border: "1px solid black",
         }}
       >
         {children}
@@ -338,13 +338,13 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
   //--------------- game data --------------- 
   const size = boardSize;
   const dimensionsNum = dimensionNum;
-  
-  const squareCount = Math.pow(size,dimensionsNum);
-  
-  const [squares, setSquares] = useState(Array.from({length: squareCount}, (_,i) => ({
+
+  const squareCount = Math.pow(size, dimensionsNum);
+
+  const [squares, setSquares] = useState(Array.from({ length: squareCount }, (_, i) => ({
     id: i,
     value: "",
-    hovered:false,
+    hovered: false,
   })));
 
   useEffect(() => {
@@ -381,12 +381,12 @@ function Board({scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
       );
     }
   }, [disableCenterPoint, squareCount]);  // rerun when these change
-  
+
   const [xIsNext, setXIsNext] = useState(true);
   const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
-  
+
   return (
-    <div ref={actualBoardDivRef} style={{display: "inline-block"}} >
+    <div ref={actualBoardDivRef} style={{ display: "inline-block" }} >
       <div
         style={{
           margin: "0 auto",        // center horizontally
