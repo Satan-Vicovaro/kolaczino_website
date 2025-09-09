@@ -1,5 +1,5 @@
 {
-  "name": "kolaczino_website",
+  "name": "kolaczino_webiste_new",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,6 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "eslint-config-prettier": "^10.1.8",
     "tailwindcss": "^4"
   }
 }
