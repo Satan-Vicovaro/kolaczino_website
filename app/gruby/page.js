@@ -15,18 +15,18 @@ function Gruby() {
       setError(true);
       return;
     }
-
     try {
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      setPhotoUrl(url);
+      const data = await res.json();
+      const url = new URL(data.path, window.location.origin);
+      url.searchParams.set("id", data.id);
+      setPhotoUrl(url.toString());
     } catch (error) {
-      console.error("Error fetching photo:  ", error);
+      console.error("Error parsing the data: ", error);
     }
   }
 
-  function handleOnClick() {
-    getImg();
+  async function handleOnClick() {
+    await getImg();
   }
 
   const [photoUrl, setPhotoUrl] = useState(null);

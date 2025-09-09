@@ -1,3 +1,3 @@
-export default function handler(req, res) {
+export async function GET(req, res) {
   res.status(200).json({ message: 'Hello from Next.js!' })
 }

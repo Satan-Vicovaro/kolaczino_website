@@ -1,28 +1,22 @@
 import fs from "fs";
 import path from "path";
+import { sharedState } from "@/lib/sharedState";
+import { NextResponse } from "next/server";
 
-function getPicture() {
-
-}
 
 export async function GET() {
 
-  const filePath = path.join(process.cwd(), "photos-private", "anime_babka.jpg");
-  console.log(filePath);
+  const data = { id: sharedState.counter, path: '/images-private/api' };
+  // console.log("Gruby api:", sharedState.counter);
 
-  if (fs.accessSync(filePath)) {
-    return new Response("File not found", { status: 404 });
-  }
-
-  const fileBuffer = fs.readFileSync(filePath);
-
-  return new Response(fileBuffer, {
+  return new Response(JSON.stringify(data), {
     status: 200,
     headers: {
-      "Content-Type": "image/jpeg"
+      "Content-Type": "application/json"
     },
   })
 }
+
 export async function POST(req) {
   const body = await req.json();
   const returnResponse = null;
