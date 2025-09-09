@@ -42,3 +42,9 @@ next-env.d.ts
 
 # vscode
 /.vscode
+
+# prisma
+/prisma/photos.db
+/lib/generated/prisma
+
+
