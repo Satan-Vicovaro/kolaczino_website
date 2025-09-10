@@ -1,15 +1,5 @@
-import { PrismaClient } from "./generated/prisma";
-
-const globalForPrisma = globalThis;
-
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    // log: ['query']
-  })
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
-
+import { prisma } from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
 
 const basicData = [
   {
@@ -34,12 +24,11 @@ const basicData = [
   },
 ]
 
-export async function loadDb() {
+export async function main() {
   for (const d of basicData) {
     await prisma.photo.create({ data: d })
   }
   console.log("Prisma: database loaded correctly");
 }
 
-// loadDb();
-
+main();
