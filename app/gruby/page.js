@@ -8,6 +8,7 @@ function Gruby() {
   async function getImg() {
     setError(null);
     setPhotoUrl(null);
+    setCurPhotoId(null);
 
     const res = await fetch("/gruby/api");
     if (!res.ok) {
@@ -20,17 +21,40 @@ function Gruby() {
       const url = new URL(data.path, window.location.origin);
       url.searchParams.set("id", data.id);
       setPhotoUrl(url.toString());
+      setCurPhotoId(data.id);
     } catch (error) {
       console.error("Error parsing the data: ", error);
     }
   }
 
-  async function handleOnClick() {
+  async function handleOnClickGetImg() {
     await getImg();
+  }
+
+  async function giveLike() {
+    if (curPhotoId === null) {
+      return;
+    }
+
+    try {
+      const url = new URL("/gruby/api", window.location.origin);
+      url.searchParams.set("giveLike", "1");
+      url.searchParams.set("photoId", curPhotoId);
+
+      await fetch(url);
+
+    } catch (error) {
+      console.error("error giving a like", error);
+    }
+  }
+
+  function handleOnClickGiveLike() {
+    giveLike();
   }
 
   const [photoUrl, setPhotoUrl] = useState(null);
   const [error, setError] = useState(false);
+  const [curPhotoId, setCurPhotoId] = useState(null);
   const [data, setData] = useState("");
 
 
@@ -40,9 +64,10 @@ function Gruby() {
         <Box className="h-screen" style={{ backgroundColor: "var(--gray-3)" }}>
           <Text as="div" size="9">Gruby appreciation site</Text>
           <div className="h-72 border-2"> Place holder</div>
-          <Button onClick={() => handleOnClick()}> Click me </Button>
+          <Button onClick={() => handleOnClickGetImg()}> Click me </Button>
           {error && <p style={{ color: "red" }}>{error}</p>}
           {photoUrl && <Image src={photoUrl} alt="Photo lol" width="300" height="300" />}
+          <Button onClick={() => { handleOnClickGiveLike() }}> Give Like !</Button>
         </Box>
       </Box>
     </Container>
