@@ -7,12 +7,9 @@ export async function GET(req, { params }) {
   const { searchParams } = new URL(req.url);
 
   const id = searchParams.get("id");
-  // console.log("image route: ", sharedState.counter);
+
   let checkId = 1;
   try {
-    const activePhoto = await prisma.photo.findFirst({
-      where: { active: true }
-    })
     console.log("image route: ", activePhoto);
     checkId = activePhoto.id;
   } catch (error) {

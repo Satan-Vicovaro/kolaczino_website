@@ -20,6 +20,7 @@ function Gruby() {
       const data = await res.json();
       const url = new URL(data.path, window.location.origin);
       url.searchParams.set("id", data.id);
+
       setPhotoUrl(url.toString());
       setCurPhotoId(data.id);
     } catch (error) {
@@ -55,8 +56,6 @@ function Gruby() {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [error, setError] = useState(false);
   const [curPhotoId, setCurPhotoId] = useState(null);
-  const [data, setData] = useState("");
-
 
   return (
     <Container size="4" align="center" content="center" >
@@ -73,7 +72,6 @@ function Gruby() {
     </Container>
   )
 }
-
 
 
 
