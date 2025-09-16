@@ -31,3 +31,9 @@ model PhotoStats {
   photo   Photo    @relation(fields: [photoId], references: [id])
   photoId Int
 }
+
+model SessionData {
+  sessionId String   @id
+  ipAddress String
+  expiresAt DateTime
+}

@@ -10,7 +10,6 @@ export async function GET(req, { params }) {
 
   let checkId = 1;
   try {
-    console.log("image route: ", activePhoto);
     checkId = activePhoto.id;
   } catch (error) {
     console.log("image route:", error);

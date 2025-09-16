@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { GetActivePhoto, GiveLikeToPhoto } from "@/lib/query";
+import { getActivePhoto, giveLikeToPhoto } from "@/lib/query";
 import { NextResponse } from "next/server";
 
 
 async function handleGiveLike(photoId) {
   try {
-    await GiveLikeToPhoto(photoId);
+    await giveLikeToPhoto(photoId);
     const data = { message: "ok" };
     return new Response(JSON.stringify(data), { status: 200 })
   } catch (error) {
@@ -17,12 +17,13 @@ async function handleGetPhotoUrl() {
   try {
     let properId = { id: 1 };
 
-    const activePhoto = await GetActivePhoto();
+    const activePhoto = await getActivePhoto();
     if (!activePhoto) {
       console.warn("No photo is active, photo id is set to 1");
+    } else {
+      console.log("Requesting photo:", activePhoto);
     }
 
-    console.log("Requesting photo:", activePhoto);
     properId = activePhoto;
 
     const data = { id: properId.id, path: '/images-private/api' };
@@ -39,8 +40,6 @@ async function handleGetPhotoUrl() {
 }
 
 export async function GET(req) {
-  const detectedIp = req.ip;
-  console.log("Requester ip", detectedIp);
 
   const { searchParams } = new URL(req.url);
   const giveLike = searchParams.get("giveLike");
