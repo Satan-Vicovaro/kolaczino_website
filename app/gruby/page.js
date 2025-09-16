@@ -36,16 +36,23 @@ function Gruby() {
     if (curPhotoId === null) {
       return;
     }
-
     try {
+      setError(null);
       const url = new URL("/gruby/api", window.location.origin);
       url.searchParams.set("giveLike", "1");
       url.searchParams.set("photoId", curPhotoId);
 
-      await fetch(url);
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        console.error("Error fetching data at giveLike gruby.api");
+        setError("ERROR");
+        return;
+      }
 
     } catch (error) {
       console.error("error giving a like", error);
+      setError(error);
     }
   }
 
@@ -56,6 +63,7 @@ function Gruby() {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [error, setError] = useState(false);
   const [curPhotoId, setCurPhotoId] = useState(null);
+  const [likeCount, setLikeCount] = useState(null);
 
   return (
     <Container size="4" align="center" content="center" >
@@ -64,9 +72,11 @@ function Gruby() {
           <Text as="div" size="9">Gruby appreciation site</Text>
           <div className="h-72 border-2"> Place holder</div>
           <Button onClick={() => handleOnClickGetImg()}> Click me </Button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {photoUrl && <Image src={photoUrl} alt="Photo lol" width="300" height="300" />}
+
           <Button onClick={() => { handleOnClickGiveLike() }}> Give Like !</Button>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          {likeCount && <p style={{ color: "yellow" }}> {likeCount}</p>}
+          {photoUrl && <Image src={photoUrl} alt="Photo lol" width="300" height="300" />}
         </Box>
       </Box>
     </Container>

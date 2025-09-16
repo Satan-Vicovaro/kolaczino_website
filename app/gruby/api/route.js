@@ -1,10 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import { getActivePhoto, giveLikeToPhoto } from "@/lib/query";
+import { canUserLikePhoto, getActivePhoto, giveLikeToPhoto } from "@/lib/query";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 
-async function handleGiveLike(photoId) {
+async function handleGiveLike(photoId, sessionId) {
   try {
+    if (!await canUserLikePhoto(sessionId)) {
+      console.log("Sending: You cannot like a photo");
+      return NextResponse.json({ message: "You cannot like a photo" }, { status: 403 })
+    }
     await giveLikeToPhoto(photoId);
     const data = { message: "ok" };
     return new Response(JSON.stringify(data), { status: 200 })
@@ -40,13 +45,15 @@ async function handleGetPhotoUrl() {
 }
 
 export async function GET(req) {
-
   const { searchParams } = new URL(req.url);
   const giveLike = searchParams.get("giveLike");
   const photoId = searchParams.get("photoId");
 
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("session")?.value;
+
   if (giveLike && photoId) {
-    return handleGiveLike(photoId);
+    return handleGiveLike(photoId, sessionId);
   }
 
   return handleGetPhotoUrl();
