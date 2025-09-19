@@ -33,7 +33,8 @@ model PhotoStats {
 }
 
 model SessionData {
-  sessionId String   @id
-  ipAddress String
-  expiresAt DateTime
+  sessionId  String   @id
+  ipAddress  String
+  expiresAt  DateTime
+  photoLikes Int      @default(0)
 }

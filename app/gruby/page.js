@@ -13,8 +13,9 @@ function Gruby() {
 
     const res = await fetch("/gruby/api");
     if (!res.ok) {
+      const json = await res.json();
       console.error("Error fetching data at gruby.api");
-      setError(true);
+      setError(json.message);
       return;
     }
 
@@ -55,7 +56,7 @@ function Gruby() {
 
       if (!res.ok) {
         console.error("Error fetching data at giveLike gruby.api");
-        setError("ERROR");
+        setError(`${res.statusText}, ${res.status}`);
         return;
       }
 
