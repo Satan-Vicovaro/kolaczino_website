@@ -1,10 +1,9 @@
-import { Box } from "@radix-ui/themes";
 
 export default function ErrorCard({ text = "" }) {
   return (
-    <Box className="rounded-full px-3 py-1 flex items-center justify-center w-max"
+    <div className="rounded-full px-3 py-1 flex items-center w-max justify-center"
       style={{ backgroundColor: "var(--red-6)", color: "var(--white-6)" }}
     >
       {text}
-    </Box>)
+    </div>)
 }
