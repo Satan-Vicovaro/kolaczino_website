@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { canUserLikePhoto, getActivePhoto, giveLikeToPhoto } from "@/lib/query";
+import { canUserLikePhoto, getActivePhoto, getActivePhotoLikeCount, giveLikeToPhoto } from "@/lib/query";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -31,7 +31,10 @@ async function handleGetPhotoUrl() {
 
     properId = activePhoto;
 
-    const data = { id: properId.id, path: '/images-private/api' };
+    const likeCount = await getActivePhotoLikeCount(properId.id);
+    console.log("like count", likeCount)
+
+    const data = { id: properId.id, path: '/images-private/api', likeCount: likeCount };
 
     return new Response(JSON.stringify(data), {
       status: 200,

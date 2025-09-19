@@ -7,8 +7,6 @@ function Gruby() {
 
   async function getImg() {
     setError(null);
-    setPhotoUrl(null);
-    setCurPhotoId(null);
 
     const res = await fetch("/gruby/api");
     if (!res.ok) {
@@ -21,10 +19,17 @@ function Gruby() {
       const url = new URL(data.path, window.location.origin);
       url.searchParams.set("id", data.id);
 
+      if (photoUrl === url.toString()) {
+        return;
+      }
+
       setPhotoUrl(url.toString());
       setCurPhotoId(data.id);
+      setLikeCount(data.likeCount);
     } catch (error) {
       console.error("Error parsing the data: ", error);
+      setPhotoUrl(null);
+      setCurPhotoId(null);
     }
   }
 
@@ -75,7 +80,7 @@ function Gruby() {
 
           <Button onClick={() => { handleOnClickGiveLike() }}> Give Like !</Button>
           {error && <p style={{ color: "red" }}>{error}</p>}
-          {likeCount && <p style={{ color: "yellow" }}> {likeCount}</p>}
+          {likeCount && <p style={{ color: "yellow" }}> {likeCount} </p>}
           {photoUrl && <Image src={photoUrl} alt="Photo lol" width="300" height="300" />}
         </Box>
       </Box>
