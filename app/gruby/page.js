@@ -1,7 +1,7 @@
 "use client"
-import ErrorCard from "@/components/ErrorCard";
-import ErrorCardMaxW from "@/components/ErrorCardMaxW";
-import InfoCard from "@/components/InfoCard";
+import ErrorCard from "@/components/infoCards/ErrorCard";
+import InfoCard from "@/components/infoCards/InfoCard";
+import ServerCard from "@/components/infoCards/ServerCard";
 import { Box, Button, Card, Container, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -11,15 +11,15 @@ function Gruby() {
   async function getImg() {
     setError(null);
 
-    const res = await fetch("/gruby/api");
-    if (!res.ok) {
-      const json = await res.json();
-      console.error("Error fetching data at gruby.api");
-      setError(json.message);
-      return;
-    }
-
     try {
+      const res = await fetch("/gruby/api");
+      if (!res.ok) {
+        const json = await res.json();
+        console.error("Error fetching data at gruby.api");
+        setError(json.message);
+        return;
+      }
+
       const data = await res.json();
       const url = new URL(data.path, window.location.origin);
       url.searchParams.set("id", data.id);
@@ -31,10 +31,12 @@ function Gruby() {
 
       setPhotoUrl(url.toString());
       setCurPhotoId(data.id);
+      setLikeCount(data.likeCount);
     } catch (error) {
       console.error("Error parsing the data: ", error);
       setPhotoUrl(null);
       setCurPhotoId(null);
+      likeCount(null);
     }
   }
 
@@ -43,6 +45,8 @@ function Gruby() {
   }
 
   async function giveLike() {
+    setServerInfo(null);
+
     if (curPhotoId === null) {
       return;
     }
@@ -54,12 +58,19 @@ function Gruby() {
 
       const res = await fetch(url);
 
+      const json = await res.json();
+
       if (!res.ok) {
         console.error("Error fetching data at giveLike gruby.api");
-        setError(`${res.statusText}, ${res.status}`);
+        setError(json.message);
         return;
       }
 
+
+      if (json.message === "ok") {
+        setServerInfo("Photo liked succesfully");
+        setLikeCount(likeCount + 1);
+      }
     } catch (error) {
       console.error("error giving a like", error);
       setError(error);
@@ -74,6 +85,7 @@ function Gruby() {
   const [error, setError] = useState(false);
   const [curPhotoId, setCurPhotoId] = useState(null);
   const [likeCount, setLikeCount] = useState(null);
+  const [serverInfo, setServerInfo] = useState(null);
 
   return (
     <Container size="4" align="center" content="center" >
@@ -92,6 +104,7 @@ function Gruby() {
                 }
               </Flex>
               {error && <ErrorCard text={error}></ErrorCard>}
+              {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
             </Card>
           </Box>
           <Box>

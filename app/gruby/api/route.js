@@ -5,13 +5,15 @@ import { NextResponse } from "next/server";
 
 async function handleGiveLike(photoId, sessionId) {
   try {
-    if (!await canUserLikePhoto(sessionId)) {
+    const result = await canUserLikePhoto(sessionId);
+
+    if (!result.canLike) {
       console.log("Sending: You cannot like a photo");
-      return NextResponse.json({ message: "You cannot like a photo" }, { status: 403 })
+      return NextResponse.json({ message: result.message }, { status: 403 })
     }
     await giveLikeToPhoto(sessionId, photoId);
-    const data = { message: "ok" };
-    return new Response(JSON.stringify(data), { status: 200 })
+    const data = { message: result.message };
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error(error);
   }
