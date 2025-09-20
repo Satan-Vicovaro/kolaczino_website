@@ -1,34 +1,35 @@
 import { sharedState } from "@/lib/sharedState";
 import path from "path";
 import fs from "fs";
-import { prisma } from "@/lib/prisma";
 import { getActivePhoto } from "@/lib/query";
+import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
-  const { searchParams } = new URL(req.url);
-
-  const id = searchParams.get("id");
-
-  let checkId = 1;
   try {
+    const { searchParams } = new URL(req.url);
+    const requestedId = searchParams.get("id");
+
     const photo = await getActivePhoto();
-    checkId = photo.id;
-  } catch (error) {
-    console.log("image route:", error);
-  }
-  if (id != checkId) {
-    return new Response("Unauthorized", { status: 403 });
-  }
+    console.log("Active photo: ", photo)
 
-  const filePath = path.join(process.cwd(), "photos-private", `${id}.jpg`);
+    if (requestedId !== photo.id) {
+      return new Response("Unauthorized", { status: 403 });
+    }
 
-  try {
-    fs.accessSync(filePath);
+    const filePath = path.join(process.cwd(), "photos-private", `${requestedId}.jpg`);
+
+    try {
+      fs.accessSync(filePath);
+    } catch (error) {
+      return NextResponse.json({ message: "file not found" }, { status: 404 });
+    }
+
     const fileBuffer = fs.readFileSync(filePath);
     return new Response(fileBuffer, {
       headers: { "Content-Type": "image/jpeg" }
     })
+
   } catch (error) {
-    return new Response("File not found", { status: 404 });
+    return NextResponse.json({ message: "Unknown error" }, { status: 500 })
   }
 }
