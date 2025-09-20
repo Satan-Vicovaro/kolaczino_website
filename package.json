@@ -12,13 +12,12 @@
     "seed": "js prisma/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.1",
+    "@prisma/client": "^6.16.2",
     "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/themes": "^3.2.1",
     "cron": "^4.3.3",
     "next": "15.5.2",
     "node-cron": "^4.2.1",
-    "prisma": "^6.16.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-zoom-pan-pinch": "^3.7.0",
@@ -30,6 +29,7 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
+    "prisma": "^6.16.2",
     "tailwindcss": "^4"
   }
 }
