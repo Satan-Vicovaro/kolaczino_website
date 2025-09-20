@@ -101,16 +101,16 @@ function Gruby() {
                 <Button onClick={() => handleOnClickGetImg()}> Click me </Button>
                 <Button onClick={() => handleOnClickGiveLike()}> Give Like !</Button>
                 {(likeCount !== null) &&
-                  <InfoCard text={likeCount} />
+                  <InfoCard> {likeCount} </InfoCard>
                 }
               </Flex>
-              {error && <ErrorCard text={error}></ErrorCard>}
+              {error && <ErrorCard> {error}</ErrorCard>}
               {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
             </Card>
           </Box>
           <div>
             <BackgroundCard width="70%" height="600px">
-              {photoUrl && <Image src={photoUrl} alt="Gruby photo" blurDataURL={photoUrl} placeholder="blur" width="400" height="500" />}
+              {photoUrl && <Image src={photoUrl} alt="Gruby photo" width="400" height="500" />}
             </BackgroundCard>
           </div>
         </Box>
