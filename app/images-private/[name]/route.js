@@ -2,6 +2,7 @@ import { sharedState } from "@/lib/sharedState";
 import path from "path";
 import fs from "fs";
 import { prisma } from "@/lib/prisma";
+import { getActivePhoto } from "@/lib/query";
 
 export async function GET(req, { params }) {
   const { searchParams } = new URL(req.url);
@@ -10,7 +11,8 @@ export async function GET(req, { params }) {
 
   let checkId = 1;
   try {
-    checkId = activePhoto.id;
+    const photo = await getActivePhoto();
+    checkId = photo.id;
   } catch (error) {
     console.log("image route:", error);
   }
