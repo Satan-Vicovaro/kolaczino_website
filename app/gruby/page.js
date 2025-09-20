@@ -1,4 +1,5 @@
 "use client"
+import BackgroundCard from "@/components/infoCards/BackgourndCard";
 import ErrorCard from "@/components/infoCards/ErrorCard";
 import InfoCard from "@/components/infoCards/InfoCard";
 import ServerCard from "@/components/infoCards/ServerCard";
@@ -107,11 +108,11 @@ function Gruby() {
               {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
             </Card>
           </Box>
-          <Box>
-            <Card className={photoUrl ? "w-72 h-max" : "w-72 h-80"}>
-              {photoUrl && <Image src={photoUrl} alt="Photo lol" width="300" height="300" />}
-            </Card>
-          </Box>
+          <div>
+            <BackgroundCard width="70%" height="600px">
+              {photoUrl && <Image src={photoUrl} alt="Gruby photo" blurDataURL={photoUrl} placeholder="blur" width="400" height="500" />}
+            </BackgroundCard>
+          </div>
         </Box>
       </Box>
     </Container >
