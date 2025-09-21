@@ -6,7 +6,12 @@ const regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-
 function getIpAddress(request) {
 
   const forwardedFor = request.headers.get("x-forwarded-for");
-  const ipAddress = forwardedFor?.split(",")[0];  //||"127.0.0.1";
+  let ipAddress = forwardedFor?.split(",")[0];
+
+  if (ipAddress.search("::ffff:") !== -1) {
+    ipAddress = ipAddress.substring("::ffff:".length);
+    console.log("Ipv4 in Ipv6: ", ipAddress);
+  }
 
   if (!regex.test(ipAddress)) {
     console.warn("weird ip addres: ", ipAddress);
