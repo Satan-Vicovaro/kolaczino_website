@@ -20,6 +20,7 @@
     "next": "15.5.2",
     "node-cron": "^4.2.1",
     "react": "19.1.0",
+    "react-clock": "^6.0.0",
     "react-dom": "19.1.0",
     "react-zoom-pan-pinch": "^3.7.0",
     "request-ip": "^3.3.0",

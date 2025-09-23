@@ -5,7 +5,9 @@ import InfoCard from "@/components/infoCards/InfoCard";
 import ServerCard from "@/components/infoCards/ServerCard";
 import { Box, Button, Card, Container, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Clock from "@/lib/Clock";
+import CountdownClock from "@/lib/CountdownClock";
 
 function Gruby() {
 
@@ -86,10 +88,11 @@ function Gruby() {
   async function getCookieExpireTime() {
     try {
       setServerInfo(null);
-
+      const res = await fetch("/api/session");
+      const data = await res.json();
+      setSessionTime(Date.parse(data.expiryDate) - Date.now());
     } catch (error) {
       console.error(error);
-
     }
   }
 
@@ -98,6 +101,7 @@ function Gruby() {
   const [curPhotoId, setCurPhotoId] = useState(null);
   const [likeCount, setLikeCount] = useState(null);
   const [serverInfo, setServerInfo] = useState(null);
+  const [sessionTime, setSessionTime] = useState(null);
 
   return (
     <Container size="4" align="center" content="center" >
@@ -105,7 +109,11 @@ function Gruby() {
         <Box className="h-max" style={{ backgroundColor: "var(--gray-3)" }}>
           <Text as="div" size="9">Gruby appreciation site</Text>
           <Box className="h-48 border-2"> Place holder</Box>
+          <div className="w-72 h-72 border-4 bg-amber-600 -z-50">
+            {sessionTime && <CountdownClock duration={sessionTime} />}
+          </div>
 
+          <Button onClick={() => getCookieExpireTime()}> LOL </Button>
           <Box className="h-32 w-72 align-middle content-center">
             <Card size={"2"} className="align-middle content-center">
               <Flex gap={"5"} width="auto" height="auto" className="align-middle content-center">
@@ -122,7 +130,6 @@ function Gruby() {
               {photoUrl && <Image src={photoUrl} alt="Gruby photo" width="400" height="500" />}
             </BackgroundCard>
           </div>
-          <Button onClick={() => handlePost()}></Button>
         </Box>
       </Box>
     </Container >

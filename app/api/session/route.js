@@ -1,11 +1,8 @@
 "use server"
 import { prisma } from "@/lib/prisma";
+import { getCookieExpireTime } from "@/lib/query";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-
-// export const runtime = "nodejs";
-//
-//
 
 export async function GET(req) {
   console.log("Sending user its cookie expire date");
@@ -13,14 +10,22 @@ export async function GET(req) {
   const cookieStore = await cookies();
 
   if (!cookieStore) {
-    return NextResponse.json("No cookie was sent", { status: 401 });
+    console.warn("No cookie was sent");
+    return NextResponse.json({ message: "No cookie was sent" }, { status: 401 });
   }
   const sessionId = cookieStore.get("session")?.value;
 
   if (!sessionId) {
-    return NextResponse.json("No session cookie was sent", { status: 401 });
+    console.warn("No session cookie was sent");
+    return NextResponse.json({ message: "No session cookie was sent" }, { status: 401 });
   }
-
+  try {
+    const expiryDate = await getCookieExpireTime(sessionId);
+    console.log("Expiry date: ", expiryDate);
+    return NextResponse.json({ expiryDate: expiryDate }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: "Error getting cookie expire time" }, { status: 500 });
+  }
 }
 
 export async function POST(req) {
