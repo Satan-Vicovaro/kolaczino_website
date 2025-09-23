@@ -1,11 +1,51 @@
+"use server"
 import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 // export const runtime = "nodejs";
+//
+//
+
+export async function GET(req) {
+  console.log("Sending user its cookie expire date");
+
+  const cookieStore = await cookies();
+
+  if (!cookieStore) {
+    return NextResponse.json("No cookie was sent", { status: 401 });
+  }
+  const sessionId = cookieStore.get("session")?.value;
+
+  if (!sessionId) {
+    return NextResponse.json("No session cookie was sent", { status: 401 });
+  }
+
+}
 
 export async function POST(req) {
-  console.log("Updating database");
-  const { sessionId, ipAddress } = await req.json();
+  const internalRequest = req.headers.get("x-internal-request");
+  if (!internalRequest) {
+    console.warn("Somebody is sending message to internal request");
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  if (internalRequest !== process.env.INTERNAL_MESSAGE_ID) {
+    console.warn("Somebody try to get INTERNAL_MESSAGE_ID: ", req.headers.get("x-forwarded-for"), "->", internalRequest);
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  console.log("New user, setting new cookie");
+
+  const cookieStore = await cookies();
+  if (!cookieStore.has("session")) {
+    console.error("no session cookie was sent!");
+    return NextResponse.json({ message: "no session cookie was sent" });
+  }
+
+  const { ipAddress } = await req.json();
+  const sessionId = cookieStore.get("session").value;
+
+  console.log("id:", sessionId);
   const session = await prisma.sessionData.upsert({
     where: { sessionId },
     update: { ipAddress, expiresAt: new Date(Date.now() + 60 * 1000) },

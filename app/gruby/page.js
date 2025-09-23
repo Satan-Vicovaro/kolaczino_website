@@ -45,10 +45,6 @@ function Gruby() {
     await getImg();
   }
 
-  function handleOnClickGiveLike() {
-    giveLike();
-  }
-
   async function giveLike() {
 
     setServerInfo(null);
@@ -83,6 +79,19 @@ function Gruby() {
     }
   }
 
+  function handleOnClickGiveLike() {
+    giveLike();
+  }
+
+  async function getCookieExpireTime() {
+    try {
+      setServerInfo(null);
+
+    } catch (error) {
+      console.error(error);
+
+    }
+  }
 
   const [photoUrl, setPhotoUrl] = useState(null);
   const [error, setError] = useState(false);

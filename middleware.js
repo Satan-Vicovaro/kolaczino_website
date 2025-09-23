@@ -1,3 +1,5 @@
+"use server"
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server'
 
 // regex for ipv4 address
@@ -21,37 +23,51 @@ function getIpAddress(request) {
 
 async function createCookie(request) {
 
-  const response = NextResponse.next();
-  const sessionId = crypto.randomUUID();
-
-  response.cookies.set("session", sessionId, {
-    httpOnly: true,
-    secure: true,
-    path: "/",
-    maxAge: 60,
-  })
-
-  // sending request to update database
   try {
+    const response = NextResponse.next();
+    const sessionId = crypto.randomUUID();
+
+    // cookies 
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: "session",
+      value: sessionId,
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      maxAge: 60,
+    })
+
+    // sending request to update database
     const ipAddress = getIpAddress(request);
-    fetch(new URL("/api/session", request.url), {
+    const cookieHeader = `session=${sessionId}`;
+
+    await fetch(new URL("/api/session", request.url), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-request": process.env.INTERNAL_MESSAGE_ID,
+        "Cookie": cookieHeader,
+      },
       body: JSON.stringify({
-        sessionId,
         ipAddress: ipAddress ?? "unknown"
       })
     });
+    return response;
   } catch (error) {
     console.error(error);
   }
-  return response;
 }
 
 export function middleware(request) {
 
+  if (!process.env.INTERNAL_MESSAGE_ID) {
+    throw new Error("INTERNAL_MESSAGE_ID is not defined in .env.local");
+  }
+
   // skip middleware for API calls
   if (request.nextUrl.pathname.startsWith("/api/")) {
+    console.log("Skipping middleware for api call");
     return NextResponse.next();
   }
 
