@@ -6,7 +6,6 @@ import ServerCard from "@/components/infoCards/ServerCard";
 import { Box, Button, Card, Container, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import Clock from "@/lib/Clock";
 import CountdownClock from "@/lib/CountdownClock";
 
 function Gruby() {
