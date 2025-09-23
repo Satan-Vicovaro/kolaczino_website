@@ -12,7 +12,8 @@ export async function GET(req, { params }) {
     const photo = await getActivePhoto();
     console.log("Active photo: ", photo)
 
-    if (requestedId !== photo.id) {
+    if (requestedId != photo.id) {
+      console.warn("Different ids:", requestedId, "!==", photo.id);
       return new Response("Unauthorized", { status: 403 });
     }
 

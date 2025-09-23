@@ -11,6 +11,7 @@ async function handleGiveLike(photoId, sessionId) {
       console.log("Sending: You cannot like a photo");
       return NextResponse.json({ message: result.message }, { status: 403 })
     }
+
     await giveLikeToPhoto(sessionId, photoId);
     const data = { message: result.message };
     return NextResponse.json(data, { status: 200 });
@@ -63,12 +64,29 @@ export async function GET(req) {
   return handleGetPhotoUrl();
 }
 
-// export async function POST(req) {
-//   const body = await req.JSON();
-//   const returnResponse = null;
-//   if (body.message === "give photo") {
-//     returnVal = getPicture();
-//   }
-//   return returnResponse;
-// }
+export async function POST(req) {
+  const body = await req.json();
+  console.log("Getting POST message: ", body);
+
+  const giveLike = body?.giveLike;
+  const photoId = body?.photoId;
+
+
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("session")?.value;
+
+  if (!sessionId) {
+    return NextResponse.json({ message: "No cookie session was send" }, { status: 401 });
+  }
+
+  if (typeof photoId === "number" && typeof giveLike === "number") {
+    const response = handleGiveLike(photoId, sessionId);
+    return response;
+  }
+
+  return NextResponse.json({
+    message: "Data is not present od not valid",
+    body: body,
+  })
+}
 

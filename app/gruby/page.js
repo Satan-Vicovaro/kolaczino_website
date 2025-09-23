@@ -45,7 +45,12 @@ function Gruby() {
     await getImg();
   }
 
+  function handleOnClickGiveLike() {
+    giveLike();
+  }
+
   async function giveLike() {
+
     setServerInfo(null);
 
     if (curPhotoId === null) {
@@ -53,22 +58,22 @@ function Gruby() {
     }
     try {
       setError(null);
-      const url = new URL("/gruby/api", window.location.origin);
-      url.searchParams.set("giveLike", "1");
-      url.searchParams.set("photoId", curPhotoId);
-
-      const res = await fetch(url);
-
-      const json = await res.json();
+      const res = await fetch("/gruby/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ giveLike: 1, photoId: curPhotoId }),
+      })
+      const jsonResponse = await res.json();
 
       if (!res.ok) {
         console.error("Error fetching data at giveLike gruby.api");
-        setError(json.message);
+        setError(jsonResponse.message);
         return;
       }
 
-
-      if (json.message === "ok") {
+      if (jsonResponse.message === "ok") {
         setServerInfo("Photo liked succesfully");
         setLikeCount(likeCount + 1);
       }
@@ -78,9 +83,6 @@ function Gruby() {
     }
   }
 
-  function handleOnClickGiveLike() {
-    giveLike();
-  }
 
   const [photoUrl, setPhotoUrl] = useState(null);
   const [error, setError] = useState(false);
@@ -100,9 +102,7 @@ function Gruby() {
               <Flex gap={"5"} width="auto" height="auto" className="align-middle content-center">
                 <Button onClick={() => handleOnClickGetImg()}> Click me </Button>
                 <Button onClick={() => handleOnClickGiveLike()}> Give Like !</Button>
-                {(likeCount !== null) &&
-                  <InfoCard> {likeCount} </InfoCard>
-                }
+                {(likeCount !== null) && <InfoCard> {likeCount} </InfoCard>}
               </Flex>
               {error && <ErrorCard> {error}</ErrorCard>}
               {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
@@ -113,6 +113,7 @@ function Gruby() {
               {photoUrl && <Image src={photoUrl} alt="Gruby photo" width="400" height="500" />}
             </BackgroundCard>
           </div>
+          <Button onClick={() => handlePost()}></Button>
         </Box>
       </Box>
     </Container >
