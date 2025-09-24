@@ -1,3 +1,4 @@
+import { getNextPhotoDate } from "@/lib/photoTimer";
 import { canUserLikePhoto, getActivePhoto, getActivePhotoLikeCount, giveLikeToPhoto } from "@/lib/query";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -36,7 +37,11 @@ async function handleGetPhotoUrl() {
     const likeCount = await getActivePhotoLikeCount(properId.id);
     console.log("like count", likeCount)
 
-    const data = { id: properId.id, path: '/images-private/api', likeCount: likeCount };
+    const nextPhotoIn = getNextPhotoDate();
+
+    console.log("photo date:", nextPhotoIn);
+
+    const data = { id: properId.id, path: '/images-private/api', likeCount: likeCount, nextPhotoIn: nextPhotoIn };
 
     return new Response(JSON.stringify(data), {
       status: 200,
@@ -49,18 +54,7 @@ async function handleGetPhotoUrl() {
   }
 }
 
-export async function GET(req) {
-  const { searchParams } = new URL(req.url);
-  const giveLike = searchParams.get("giveLike");
-  const photoId = searchParams.get("photoId");
-
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get("session")?.value;
-
-  if (giveLike && photoId) {
-    return handleGiveLike(photoId, sessionId);
-  }
-
+export async function GET() {
   return handleGetPhotoUrl();
 }
 

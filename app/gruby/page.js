@@ -34,11 +34,12 @@ function Gruby() {
       setPhotoUrl(url.toString());
       setCurPhotoId(data.id);
       setLikeCount(data.likeCount);
+      setNextPhotoTime(Date.parse(data.nextPhotoIn) - Date.now());
     } catch (error) {
       console.error("Error parsing the data: ", error);
       setPhotoUrl(null);
       setCurPhotoId(null);
-      likeCount(null);
+      setLikeCount(null);
     }
   }
 
@@ -101,6 +102,7 @@ function Gruby() {
   const [likeCount, setLikeCount] = useState(null);
   const [serverInfo, setServerInfo] = useState(null);
   const [sessionTime, setSessionTime] = useState(null);
+  const [nextPhotoTime, setNextPhotoTime] = useState(null);
 
   return (
     <Container size="4" align="center" content="center" >
@@ -110,6 +112,7 @@ function Gruby() {
           <Box className="h-48 border-2"> Place holder</Box>
           <div className="w-72 h-72 border-4 bg-amber-600 -z-50">
             {sessionTime && <CountdownClock duration={sessionTime} />}
+            {nextPhotoTime && <CountdownClock duration={nextPhotoTime} />}
           </div>
 
           <Button onClick={() => getCookieExpireTime()}> LOL </Button>
