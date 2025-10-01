@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import InfoCard from "@/components/infoCards/InfoCard";
+import BackgroundCard from "@/components/infoCards/BackgourndCard";
 
-export default function CountdownClock({ duration = 60000 }) {
+export default function CountdownClock({ duration = 60000, width = "", height = "", onTimeUp = () => { } }) {
   const [remaining, setRemaining] = useState(() => duration);
   const endTimeRef = useRef(Date.now() + duration);
   const intervalRef = useRef(null);
@@ -26,6 +26,7 @@ export default function CountdownClock({ duration = 60000 }) {
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      // onTimeUp();
     };
   }, [duration]);
 
@@ -37,12 +38,10 @@ export default function CountdownClock({ duration = 60000 }) {
   const seconds = totalSeconds % 60;
 
   return (
-    <InfoCard>
-      <div className="time">
-        <span className="clock">{pad(hours)}:</span>
-        <span className="clock">{pad(minutes)}:</span>
-        <span className="secs">{pad(seconds)}</span>
-      </div>
-    </InfoCard>
+    <div className="bg-gray-100/10 text-m">
+      <span className="clock">{pad(hours)}:</span>
+      <span className="clock">{pad(minutes)}:</span>
+      <span className="secs">{pad(seconds)}</span>
+    </div>
   );
 }
