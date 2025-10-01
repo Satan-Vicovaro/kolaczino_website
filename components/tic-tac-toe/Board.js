@@ -1,6 +1,6 @@
 import { Theme } from "@radix-ui/themes";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Square from "./Square";
 
 function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
@@ -383,7 +383,7 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
   }, [disableCenterPoint, squareCount]);  // rerun when these change
 
   const [xIsNext, setXIsNext] = useState(true);
-  const neighbourhoodDirections = createNeighbourhoodVector(dimensionsNum);
+  const neighbourhoodDirections = useMemo(() => createNeighbourhoodVector(dimensionsNum));
 
   return (
     <div ref={actualBoardDivRef} style={{ display: "inline-block" }} >
