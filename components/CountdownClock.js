@@ -6,6 +6,7 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
   const [remaining, setRemaining] = useState(() => duration);
   const endTimeRef = useRef(Date.now() + duration);
   const intervalRef = useRef(null);
+  const runAlready = useRef(false);
 
   useEffect(() => {
     endTimeRef.current = Date.now() + duration;
@@ -18,6 +19,10 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
       if (diff <= 0) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
+        if (!runAlready.current) {
+          onTimeUp();
+          runAlready.current = true;
+        }
       }
     };
 
@@ -26,10 +31,10 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      // onTimeUp();
     };
   }, [duration]);
 
+  console.log("im ticking:", runAlready);
   const pad = (num) => num.toString().padStart(2, "0");
 
   const totalSeconds = Math.ceil(remaining / 1000);
