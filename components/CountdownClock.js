@@ -43,7 +43,7 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
   const seconds = totalSeconds % 60;
 
   return (
-    <div className="bg-gray-100/10 text-m">
+    <div className="bg-gray-0 text-2xl">
       <span className="clock">{pad(hours)}:</span>
       <span className="clock">{pad(minutes)}:</span>
       <span className="secs">{pad(seconds)}</span>

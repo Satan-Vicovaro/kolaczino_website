@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import CountdownClock from "@/components/CountdownClock";
 import HeartButton from "@/components/gruby_page/heartButton";
 import NextPhotoButton from "@/components/gruby_page/NextPhotoButton";
+import { Clicker_Script } from "next/font/google";
 
 function Gruby() {
 
@@ -92,8 +93,9 @@ function Gruby() {
 
   function handleOnNextPageTimeUp() {
     setIsNextPhotoButtonDisabled(false);
-    // setNextPhotoDate(null);
-    getCookieExpireTime()
+    setIsNextPhotoButtonClicked(false);
+    setNextPhotoDate(null);
+    getCookieExpireTime();
   }
 
 
@@ -105,6 +107,7 @@ function Gruby() {
   const [sessionTime, setSessionTime] = useState(null);
   const [nextPhotoDate, setNextPhotoDate] = useState(null);
   const [isNextPhotoButtonDisabled, setIsNextPhotoButtonDisabled] = useState(false);
+  const [isNextPhotoButtonClicked, setIsNextPhotoButtonClicked] = useState(false);
 
   return (
     <Container size="4" align="center" content="center" >
@@ -125,13 +128,14 @@ function Gruby() {
             </div>
             <div className="w-4/5 h-20 bg-black rounded-xl shadow-md flex items-center justify-between px-6">
               <NextPhotoButton onClick={
-                async () => {
-                  await handleOnClickGetImg();
-                  await getCookieExpireTime();
+                () => {
+                  handleOnClickGetImg();
                   setIsNextPhotoButtonDisabled(true);
+                  setIsNextPhotoButtonClicked(true);
                 }
               }
                 disabled={isNextPhotoButtonDisabled}
+                clicked={isNextPhotoButtonClicked}
               >
                 {nextPhotoDate && <CountdownClock duration={(nextPhotoDate - Date.now())} onTimeUp={() => handleOnNextPageTimeUp()} />}
 
