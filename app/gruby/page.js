@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import CountdownClock from "@/components/CountdownClock";
 import HeartButton from "@/components/gruby_page/heartButton";
 import NextPhotoButton from "@/components/gruby_page/NextPhotoButton";
-import { Clicker_Script } from "next/font/google";
 
 function Gruby() {
 
@@ -30,6 +29,8 @@ function Gruby() {
       setPhotoUrl(url.toString());
       setCurPhotoId(data.id);
       setLikeCount(data.likeCount);
+      setIsGiveLikeButtonDisabled(false);
+      // setServerInfo("Photo fetched succesfully")
     } catch (error) {
       console.error("Error parsing the data: ", error);
       setPhotoUrl(null);
@@ -76,11 +77,6 @@ function Gruby() {
     }
   }
 
-  function handleOnClickGiveLike() {
-    giveLike();
-    setIsGiveLikeButtonClicked(true);
-  }
-
   async function getCookieExpireTime() {
     try {
       setServerInfo(null);
@@ -99,11 +95,11 @@ function Gruby() {
     getCookieExpireTime();
   }
 
-  function handleOnLikeButtonTimeUp() {
+  async function handleOnLikeButtonTimeUp() {
+    await fetch("/");
+    await getCookieExpireTime();
     setIsGiveLikeButtonClicked(false);
     setIsGiveLikeButtonDisabled(false);
-    setSessionTime(null);
-    getCookieExpireTime();
   }
 
 
@@ -117,55 +113,66 @@ function Gruby() {
   const [isNextPhotoButtonDisabled, setIsNextPhotoButtonDisabled] = useState(false);
   const [isNextPhotoButtonClicked, setIsNextPhotoButtonClicked] = useState(false);
   const [isGiveLikeButtonClicked, setIsGiveLikeButtonClicked] = useState(false);
-  const [isGiveLikeButtonDisabled, setIsGiveLikeButtonDisabled] = useState(false);
+  const [isGiveLikeButtonDisabled, setIsGiveLikeButtonDisabled] = useState(true);
+
   return (
     <Container size="4" align="center" content="center" >
       <Box align="center" content="center">
-        <Box className="h-max rounded-xl" style={{ backgroundColor: "var(--gray-2)" }}>
+        <Box className="h-max rounded-xl pb-10" style={{ backgroundColor: "black" }}>
           <div>
             <Text as="div" size="9" className="m-10 p-10">Gruby appreciation site</Text>
           </div>
           <Card className="m-10">
-            <Text as="div" size="6" className="m-10 p-10">
+            <Text as="div" size="6" className="m-10 p-10 text-justify">
               Deep dive into wonderfull world of <Strong> unlimited </Strong> Gruby's  photos
               (well, actually☝️🤓 only one image per day).
               Feel free to leave a like to a Gruby's photo, for every like he gets one more scoop of food!
               (you don't want to starve him, do you 😿)
             </Text>
           </Card>
-          <div className="w-4/5 border border-white rounded-xl">
+          <div className="w-4/5 border bg-black border-white/20 rounded-xl">
             <div className="w-3/4 h-150 content-center align-middle">
               {photoUrl && <Image src={photoUrl} alt="Gruby photo" width="400" height="500" />}
             </div>
-            <div className="w-4/5 h-20 bg-black rounded-xl shadow-md flex items-center justify-between px-6">
-              <NextPhotoButton onClick={
-                () => {
-                  handleOnClickGetImg();
-                  setIsNextPhotoButtonDisabled(true);
-                  setIsNextPhotoButtonClicked(true);
+            <div className="w-4/5 p-5 bg-black rounded-xl shadow-md">
+              <div className="flex items-center justify-between px-6 p-5 border-1 rounded-xl border-white/20">
+                <NextPhotoButton onClick={
+                  () => {
+                    handleOnClickGetImg();
+                    setIsNextPhotoButtonDisabled(true);
+                    setIsNextPhotoButtonClicked(true);
+                  }
                 }
-              }
-                disabled={isNextPhotoButtonDisabled}
-                clicked={isNextPhotoButtonClicked}
-              >
-                {nextPhotoDate && <CountdownClock duration={(nextPhotoDate - Date.now())} onTimeUp={() => handleOnNextPageTimeUp()} />}
+                  disabled={isNextPhotoButtonDisabled}
+                  clicked={isNextPhotoButtonClicked}
+                >
+                  {nextPhotoDate && <CountdownClock duration={(nextPhotoDate - Date.now())} onTimeUp={() => handleOnNextPageTimeUp()} />}
 
-              </NextPhotoButton>
+                </NextPhotoButton>
 
-              <HeartButton onClick={() => handleOnClickGiveLike()}
-                clicked={isGiveLikeButtonClicked}
-                disabled={isGiveLikeButtonDisabled}  >
-                {sessionTime &&
-                  <CountdownClock width="50px" height="50px" duration={(sessionTime - Date.now())} onTimeUp={() => handleOnLikeButtonTimeUp()} />
+                <HeartButton onClick={
+                  async () => {
+                    await giveLike();
+                    setIsGiveLikeButtonClicked(true);
+                    setIsGiveLikeButtonDisabled(true);
+                    getCookieExpireTime();
+                  }
                 }
-              </HeartButton>
+                  clicked={isGiveLikeButtonClicked}
+                  disabled={isGiveLikeButtonDisabled}>
+                  {sessionTime &&
+                    <CountdownClock width="50px" height="50px" textSize="text-m" duration={(sessionTime - Date.now())} onTimeUp={() => handleOnLikeButtonTimeUp()} />
+                  }
+                </HeartButton>
 
-              <div className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white text-sm">
-                {(likeCount !== null) && <div> {likeCount} </div>}
+                <div className="w-14 h-14 border border-white/30 rounded-full flex items-center justify-center text-white text-2xl">
+                  {(likeCount !== null) && <div> {likeCount} </div>}
+                </div>
               </div>
+
+              {error && <ErrorCard onCloseButtonClick={() => { setError(null) }}> {error}</ErrorCard>}
+              {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
             </div>
-            {error && <ErrorCard> {error}</ErrorCard>}
-            {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
           </div>
         </Box>
       </Box>

@@ -62,10 +62,9 @@ async function createCookie(request) {
 
 export function middleware(request) {
 
-
   // skip middleware for API calls
-  if (request.nextUrl.pathname.startsWith("/api/")) {
-    console.log("Skipping middleware for api call");
+  if (request.nextUrl.pathname.startsWith("/api/") && request.method === "POST") {
+    console.log("Skipping middleware for api POST call");
     return NextResponse.next();
   }
 
