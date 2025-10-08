@@ -78,6 +78,7 @@ function Gruby() {
 
   function handleOnClickGiveLike() {
     giveLike();
+    setIsGiveLikeButtonClicked(true);
   }
 
   async function getCookieExpireTime() {
@@ -98,6 +99,13 @@ function Gruby() {
     getCookieExpireTime();
   }
 
+  function handleOnLikeButtonTimeUp() {
+    setIsGiveLikeButtonClicked(false);
+    setIsGiveLikeButtonDisabled(false);
+    setSessionTime(null);
+    getCookieExpireTime();
+  }
+
 
   const [photoUrl, setPhotoUrl] = useState(null);
   const [error, setError] = useState(false);
@@ -108,7 +116,8 @@ function Gruby() {
   const [nextPhotoDate, setNextPhotoDate] = useState(null);
   const [isNextPhotoButtonDisabled, setIsNextPhotoButtonDisabled] = useState(false);
   const [isNextPhotoButtonClicked, setIsNextPhotoButtonClicked] = useState(false);
-
+  const [isGiveLikeButtonClicked, setIsGiveLikeButtonClicked] = useState(false);
+  const [isGiveLikeButtonDisabled, setIsGiveLikeButtonDisabled] = useState(false);
   return (
     <Container size="4" align="center" content="center" >
       <Box align="center" content="center">
@@ -118,8 +127,10 @@ function Gruby() {
           </div>
           <Card className="m-10">
             <Text as="div" size="6" className="m-10 p-10">
-              Deep dive into wonderfull world of <Strong> unlimited </Strong> Gruby's  photos (well, actually☝️🤓 only one image per day).
-              Feel free to leave a like to a Gruby's photo, for every like he gets one more scoop of food! (you don't want to starve him, do you 😿)
+              Deep dive into wonderfull world of <Strong> unlimited </Strong> Gruby's  photos
+              (well, actually☝️🤓 only one image per day).
+              Feel free to leave a like to a Gruby's photo, for every like he gets one more scoop of food!
+              (you don't want to starve him, do you 😿)
             </Text>
           </Card>
           <div className="w-4/5 border border-white rounded-xl">
@@ -141,9 +152,11 @@ function Gruby() {
 
               </NextPhotoButton>
 
-              <HeartButton onClick={() => handleOnClickGiveLike()} >
+              <HeartButton onClick={() => handleOnClickGiveLike()}
+                clicked={isGiveLikeButtonClicked}
+                disabled={isGiveLikeButtonDisabled}  >
                 {sessionTime &&
-                  <CountdownClock width="50px" height="50px" duration={(sessionTime - Date.now())} />
+                  <CountdownClock width="50px" height="50px" duration={(sessionTime - Date.now())} onTimeUp={() => handleOnLikeButtonTimeUp()} />
                 }
               </HeartButton>
 
@@ -151,7 +164,6 @@ function Gruby() {
                 {(likeCount !== null) && <div> {likeCount} </div>}
               </div>
             </div>
-            {/* {sessionTime && <CountdownClock duration={(sessionTime - Date.now())} />} */}
             {error && <ErrorCard> {error}</ErrorCard>}
             {serverInfo && <ServerCard> {serverInfo} </ServerCard>}
           </div>
