@@ -1,6 +1,7 @@
 "use server"
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server'
+import { COOKIE_EXPIRE_TIME } from './lib/constants';
 
 // regex for ipv4 address
 const regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
@@ -33,7 +34,7 @@ async function createCookie(request) {
       httpOnly: true,
       secure: true,
       path: "/",
-      maxAge: 15,
+      maxAge: COOKIE_EXPIRE_TIME / 1000,
     })
 
     const ipAddress = getIpAddress(request);
