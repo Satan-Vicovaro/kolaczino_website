@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCookieExpireTime } from "@/lib/query";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { COOKIE_EXPIRE_TIME } from "@/lib/constants";
 
 export async function GET(req) {
   console.log("Sending user its cookie expire date");
@@ -11,13 +12,15 @@ export async function GET(req) {
 
   if (!cookieStore) {
     console.warn("No cookie was sent");
-    return NextResponse.json({ message: "No cookie was sent" }, { status: 401 });
+    // return NextResponse.json({ message: "No cookie was sent" }, { status: 401 });
+    return NextResponse.redirect("/gruby/api");
   }
   const sessionId = cookieStore.get("session")?.value;
 
   if (!sessionId) {
     console.warn("No session cookie was sent");
-    return NextResponse.json({ message: "No session cookie was sent" }, { status: 401 });
+    // return NextResponse.json({ message: "No session cookie was sent" }, { status: 401 });
+    return NextResponse.redirect("/gruby/api");
   }
   try {
     const expiryDate = await getCookieExpireTime(sessionId);
@@ -53,8 +56,8 @@ export async function POST(req) {
   console.log("id:", sessionId);
   const session = await prisma.sessionData.upsert({
     where: { sessionId },
-    update: { ipAddress, expiresAt: new Date(Date.now() + 60 * 1000) },
-    create: { sessionId, ipAddress, expiresAt: new Date(Date.now() + 60 * 1000) },
+    update: { ipAddress, expiresAt: new Date(Date.now() + COOKIE_EXPIRE_TIME) },
+    create: { sessionId, ipAddress, expiresAt: new Date(Date.now() + COOKIE_EXPIRE_TIME) },
   });
   return NextResponse.json(session);
 }
