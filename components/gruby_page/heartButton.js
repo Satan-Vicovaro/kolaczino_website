@@ -12,14 +12,14 @@ export default function HeartButton({ onClick, disabled = false, children, click
       disabled={disabled}
     >
       {clicked ? (
-        <HeartFilledIcon className="w-8 h-8 text-red-500" />
+        <HeartFilledIcon className="w-14 h-14 text-red-500" />
       ) : (
-        <HeartIcon className="w-8 h-8 text-gray-500" />
+        <HeartIcon className="w-14 h-14 text-gray-500" />
       )}
 
       {clicked && (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="border-2 border-red-500 w-40 h-40 flex items-center justify-center">
+          <div className="w-14 h-14 flex items-center justify-center cursor-not-allowed">
             {children}
           </div>
         </div>
