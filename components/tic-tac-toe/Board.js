@@ -139,12 +139,11 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
 
   function checkDimension(startPoint, indexesToCheckDimension) {
     let player = getSquare(startPoint).value;
-    // if (player === null || player === undefined) {
-    //     return {filled: false, player:null}
-    // }
+
     if (!(player === "X" || player === "O")) {
       return { filled: false, player: null }
     }
+
     for (let i = 0; i < size; i++) {
       if (getSquare(startPoint).value !== player) {
         return { filled: false, player: player }
@@ -207,7 +206,6 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
       number = Math.floor(number / base);
       i += 1;
     }
-    // result.reverse();
     return result;
   }
 
@@ -217,7 +215,7 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     let vector = Array(iterations);
     while (i < iterations) {
       let direction = convertBase(i, 3, dimensionsNum);
-      // to conver it into range -1, 0, 1
+      // to convert it into range -1, 0, 1
       vector[i] = direction.map(element => element - 1);
       i += 1;
     }
@@ -380,7 +378,7 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
         )
       );
     }
-  }, [disableCenterPoint, squareCount]);  // rerun when these change
+  }, [disableCenterPoint, squareCount]);
 
   const [xIsNext, setXIsNext] = useState(true);
   const neighbourhoodDirections = useMemo(() => createNeighbourhoodVector(dimensionsNum));
@@ -389,10 +387,10 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     <div ref={actualBoardDivRef} style={{ display: "inline-block" }} >
       <div
         style={{
-          margin: "0 auto",        // center horizontally
-          display: "flex",         // use flexbox for inner alignment
-          justifyContent: "center",// center inner content horizontally
-          alignItems: "center",    // center inner content vertically
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}>
         {buildGrid(squares, dimensionsNum)}</div>
     </div>
