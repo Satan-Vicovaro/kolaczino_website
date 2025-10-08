@@ -24,25 +24,23 @@ function getIpAddress(request) {
 async function createCookie(request) {
 
   try {
-    const response = NextResponse.next();
+    let response = NextResponse.next();
     const sessionId = crypto.randomUUID();
 
-    // cookies 
-    const cookieStore = await cookies();
-    cookieStore.set({
+    response.cookies.set({
       name: "session",
       value: sessionId,
       httpOnly: true,
       secure: true,
       path: "/",
-      maxAge: 60,
+      maxAge: 15,
     })
 
-    // sending request to update database
     const ipAddress = getIpAddress(request);
     const cookieHeader = `session=${sessionId}`;
 
-    await fetch(new URL("/api/session", request.url), {
+    // sending request to update database
+    fetch(new URL("/api/session", request.url), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,17 +51,17 @@ async function createCookie(request) {
         ipAddress: ipAddress ?? "unknown"
       })
     });
+
     return response;
   } catch (error) {
     console.error(error);
   }
 }
 
+
+
 export function middleware(request) {
 
-  if (!process.env.INTERNAL_MESSAGE_ID) {
-    throw new Error("INTERNAL_MESSAGE_ID is not defined in .env.local");
-  }
 
   // skip middleware for API calls
   if (request.nextUrl.pathname.startsWith("/api/")) {
@@ -71,9 +69,7 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
-  const cookies = request.cookies.get("session");
-  // create a cookie if it is absent
-  if (!cookies) {
+  if (!request.cookies.has("session")) {
     const response = createCookie(request);
     return response;
   }
