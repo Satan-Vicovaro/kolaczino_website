@@ -2,11 +2,15 @@
 import { useRef, useState, useEffect } from "react";
 import BackgroundCard from "@/components/infoCards/BackgourndCard";
 
-export default function CountdownClock({ duration = 60000, width = "", height = "", onTimeUp = () => { } }) {
+export default function CountdownClock({ duration = 60000, width = "", height = "", textSize = "text-2xl", onTimeUp = () => { } }) {
   const [remaining, setRemaining] = useState(() => duration);
   const endTimeRef = useRef(Date.now() + duration);
   const intervalRef = useRef(null);
   const runAlready = useRef(false);
+
+  if (isNaN(duration)) {
+    duration = 0;
+  }
 
   useEffect(() => {
     endTimeRef.current = Date.now() + duration;
@@ -34,7 +38,6 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
     };
   }, [duration]);
 
-  console.log("im ticking:", runAlready);
   const pad = (num) => num.toString().padStart(2, "0");
 
   const totalSeconds = Math.ceil(remaining / 1000);
@@ -43,7 +46,7 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
   const seconds = totalSeconds % 60;
 
   return (
-    <div className="bg-gray-0 text-2xl">
+    <div className={`bg-gray-0 ${textSize}`}>
       <span className="clock">{pad(hours)}:</span>
       <span className="clock">{pad(minutes)}:</span>
       <span className="secs">{pad(seconds)}</span>
