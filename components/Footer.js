@@ -4,7 +4,7 @@ import React from "react";
 function Footer() {
 
   return (
-    <footer style={{ background: "var(--gray-a3)" }} >
+    <footer style={{ background: "var(--gray-a2)" }} >
       <Section size="1">
         <Container size="1">
           <Text size="5"> Kolaczino website 2025 </Text> <br />
@@ -13,7 +13,7 @@ function Footer() {
         </Container>
       </Section>
     </footer>
-  ) 
+  )
 }
 
 export default Footer
