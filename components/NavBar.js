@@ -1,30 +1,30 @@
-import { Grid, Card, Container } from "@radix-ui/themes";
 import Link from "next/link";
-import React from "react";
+import "./NavBar.css"
 
-function NavBar() {
+export default function NavBar() {
   return (
-    <nav className="m-5">
-      <Container >
-        <Card>
-          <Grid columns="4" gap="3" rows="repeat(1, 64px)" width="auto">
-            <Card style={{ backgroundColor: "var(--gray-3)" }} asChild>
-              <Link href={"/gruby"}> Gruby </Link>
-            </Card>
-            <Card style={{ backgroundColor: "var(--gray-3)" }} asChild>
-              <Link href={"/tic-tac-toe"}> Tic-Tac-Toe </Link>
-            </Card>
-            <Card style={{ backgroundColor: "var(--gray-3)" }} asChild>
-              <Link href={"/about-me"}> About me</Link>
-            </Card>
-            <Card style={{ backgroundColor: "var(--gray-3)" }} asChild>
-              <Link href={"/homestuck-mirror"}> Homestuck mirror </Link>
-            </Card>
-          </Grid>
-        </Card>
-      </Container>
-    </nav >
-  )
-}
-export default NavBar
+    <nav className="m-5 pt-1">
+      <div className="max-w-4xl mx-auto">
+        <div className=" BackGroundPanel rounded-lg shadow-sm p-2 bg-grayRadix-9"
+        >
+          <div className="grid grid-cols-2 gap-6 mx-6 my-3 auto-rows-[64px]">
+            <Link
+              href="/gruby"
+              className="CardColor flex items-center justify-center w-full h-full 
+                         rounded-md border bg-grayRadix-6"
+            >
+              Gruby
+            </Link>
 
+            <Link
+              href="/tic-tac-toe"
+              className="CardColor flex items-center justify-center w-full h-full rounded-md border"
+            >
+              Tic-Tac-Toe
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
