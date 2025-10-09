@@ -132,15 +132,17 @@ function Gruby() {
           </Card>
           <div className="w-4/5 border bg-black border-white/20 rounded-xl">
             <div className="w-3/4 h-150 content-center align-middle">
-              {photoUrl && <Image src={photoUrl} alt="Gruby photo" width="400" height="500" />}
+              {photoUrl && <Image blurDataURL={photoUrl} placeholder="blur" src={photoUrl} alt="Gruby photo" width="400" height="500" />}
             </div>
             <div className="w-4/5 p-5 bg-black rounded-xl shadow-md">
               <div className="flex items-center justify-between px-6 p-5 border-1 rounded-xl border-white/20">
                 <NextPhotoButton onClick={
-                  () => {
-                    handleOnClickGetImg();
+                  async () => {
+                    setServerInfo("Requesting image...");
+                    await handleOnClickGetImg();
                     setIsNextPhotoButtonDisabled(true);
                     setIsNextPhotoButtonClicked(true);
+                    setServerInfo(null);
                   }
                 }
                   disabled={isNextPhotoButtonDisabled}
