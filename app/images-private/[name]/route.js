@@ -1,10 +1,9 @@
-import { sharedState } from "@/lib/sharedState";
 import path from "path";
 import fs from "fs";
 import { getActivePhoto } from "@/lib/query";
 import { NextResponse } from "next/server";
 
-export async function GET(req, { params }) {
+export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const requestedId = searchParams.get("id");
