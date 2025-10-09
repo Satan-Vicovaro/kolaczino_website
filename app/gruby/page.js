@@ -131,7 +131,7 @@ function Gruby() {
             </Text>
           </Card>
           <div className="w-4/5 border bg-black border-white/20 rounded-xl">
-            <div className="w-3/4 h-150 content-center align-middle">
+            <div className="w-3/4 h-max content-center align-middle mt-5">
               {photoUrl && <Image blurDataURL={photoUrl} placeholder="blur" src={photoUrl} alt="Gruby photo" width="400" height="500" />}
             </div>
             <div className="w-4/5 p-5 bg-black rounded-xl shadow-md">
