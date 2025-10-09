@@ -2,7 +2,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 
 export default function ErrorCard({ children, onCloseButtonClick = () => { } }) {
   return (
-    <div className="rounded-full px-3 py-1 flex items-center w-max justify-center align-middle"
+    <div className="rounded-full px-3 py-1 mt-4 flex items-center w-max justify-center align-middle"
       style={{ backgroundColor: "var(--red-6)", color: "var(--white-6)" }}
     >
       {children}
