@@ -23,34 +23,32 @@ async function handleGiveLike(photoId, sessionId) {
 
 async function handleGetPhotoUrl() {
   try {
-    let properId = { id: 1 };
+    let properId;
 
     const activePhoto = await getActivePhoto();
     if (!activePhoto) {
       console.warn("No photo is active, photo id is set to 1");
+      properId = 1;
     } else {
       console.log("Requesting photo:", activePhoto);
     }
 
-    properId = activePhoto;
+    properId = activePhoto.id;
 
-    const likeCount = await getActivePhotoLikeCount(properId.id);
+    const likeCount = await getActivePhotoLikeCount(properId);
     console.log("like count", likeCount)
 
     const nextPhotoIn = getNextPhotoDate();
 
     console.log("photo date:", nextPhotoIn);
 
-    const data = { id: properId.id, path: '/images-private/api', likeCount: likeCount, nextPhotoIn: nextPhotoIn };
+    const data = { id: properId, path: '/images-private/api', likeCount: likeCount, nextPhotoIn: nextPhotoIn };
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json"
-      },
-    })
+    return NextResponse.json(data, { status: 200 });
+
   } catch (error) {
     console.error(error);
+    return NextResponse.error({ status: 500 });
   }
 }
 
