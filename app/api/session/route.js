@@ -54,10 +54,14 @@ export async function POST(req) {
   const sessionId = cookieStore.get("session").value;
 
   console.log("id:", sessionId);
-  const session = await prisma.sessionData.upsert({
-    where: { sessionId },
-    update: { ipAddress, expiresAt: new Date(Date.now() + COOKIE_EXPIRE_TIME) },
-    create: { sessionId, ipAddress, expiresAt: new Date(Date.now() + COOKIE_EXPIRE_TIME) },
-  });
-  return NextResponse.json(session);
+  try {
+    const session = await prisma.sessionData.upsert({
+      where: { sessionId },
+      update: { ipAddress, expiresAt: new Date(Date.now() + COOKIE_EXPIRE_TIME) },
+      create: { sessionId, ipAddress, expiresAt: new Date(Date.now() + COOKIE_EXPIRE_TIME) },
+    });
+    return NextResponse.json(session);
+  } catch (error) {
+    console.error(error);
+  }
 }
