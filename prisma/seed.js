@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/prisma";
+const { PrismaClient } = require('../prisma/generated/prisma');
+const prisma = new PrismaClient();
 
 const basicData = [
   {
@@ -193,11 +194,19 @@ const basicData = [
   },
 ]
 
-export async function main() {
+async function main() {
   for (const d of basicData) {
-    await prisma.photo.create({ data: d })
+    console.log("inserting: ", d);
+    await prisma.photo.create({ data: d });
   }
-  console.log("Prisma: database loaded correctly");
+  console.log("✅ Prisma: database loaded correctly");
 }
 
-main();
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
