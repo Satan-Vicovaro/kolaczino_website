@@ -1,0 +1,14 @@
+@import "@radix-ui/themes/styles.css";
+@import "@radix-ui/colors/gray.css";
+
+.BackGroundPanel {
+  background-color: var(--gray-2);
+}
+
+.CardColor {
+  background-color: var(--gray-5);
+}
+
+.CardColor:hover {
+  background-color: var(--gray-7);
+}

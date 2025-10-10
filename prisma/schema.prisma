@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./photos.db"
+}
+
+model Photo {
+  id          Int          @id @default(autoincrement())
+  name        String       @default("")
+  description String       @default("")
+  pathToImg   String       @unique
+  active      Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  stats       PhotoStats[]
+}
+
+model PhotoStats {
+  id      Int      @id @default(autoincrement())
+  usedAt  DateTime @default(now())
+  likes   Int      @default(0)
+  photoId Int
+  photo   Photo    @relation(fields: [photoId], references: [id])
+}
+
+model SessionData {
+  sessionId  String   @id
+  ipAddress  String
+  expiresAt  DateTime
+  photoLikes Int      @default(0)
+}

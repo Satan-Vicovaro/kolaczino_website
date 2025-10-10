@@ -1,4 +1,8 @@
 @radix-ui/themes
 @react-zoom-pan-pinch
 @radix-ui/react-icons
+prisma
+@prisma/client
+sqlite3
+node-cron
 
