@@ -5,22 +5,20 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { COOKIE_EXPIRE_TIME } from "@/lib/constants";
 
-export async function GET(req) {
+export async function GET(request) {
   console.log("Sending user its cookie expire date");
 
   const cookieStore = await cookies();
 
   if (!cookieStore) {
     console.warn("No cookie was sent");
-    // return NextResponse.json({ message: "No cookie was sent" }, { status: 401 });
-    return NextResponse.redirect("/gruby/api");
+    return NextResponse.json({ message: "No cookie was sent" }, { status: 403 });
   }
   const sessionId = cookieStore.get("session")?.value;
 
   if (!sessionId) {
     console.warn("No session cookie was sent");
-    // return NextResponse.json({ message: "No session cookie was sent" }, { status: 401 });
-    return NextResponse.redirect("/gruby/api");
+    return NextResponse.json({ message: "No session cookie was sent" }, { status: 403 });
   }
   try {
     const expiryDate = await getCookieExpireTime(sessionId);
