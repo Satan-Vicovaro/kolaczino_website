@@ -20,7 +20,7 @@ export default function NavBar() {
               href="/tic-tac-toe"
               className="CardColor flex items-center justify-center w-full h-full rounded-md border"
             >
-              Tic-Tac-Toe
+              Fancy Tic-Tac-Toe
             </Link>
           </div>
         </div>
