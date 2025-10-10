@@ -17,8 +17,7 @@ function Gruby() {
       if (!res.ok) {
         const json = await res.json();
         console.error("Error fetching data at gruby.api");
-        setError(json.message);
-        return;
+        throw new Error(json.message);
       }
 
       const data = await res.json();
@@ -29,13 +28,17 @@ function Gruby() {
       setPhotoUrl(url.toString());
       setCurPhotoId(data.id);
       setLikeCount(data.likeCount);
+      setImageWidth(data.imageWidth);
+      setImageHeight(data.imageHeight);
       setIsGiveLikeButtonDisabled(false);
-      // setServerInfo("Photo fetched succesfully")
     } catch (error) {
-      console.error("Error parsing the data: ", error);
+      setError(error.toString());
       setPhotoUrl(null);
       setCurPhotoId(null);
       setLikeCount(null);
+      setIsNextPhotoButtonDisabled(false);
+      setIsNextPhotoButtonClicked(false);
+      setServerInfo(null);
     }
   }
 
@@ -114,6 +117,8 @@ function Gruby() {
   const [isNextPhotoButtonClicked, setIsNextPhotoButtonClicked] = useState(false);
   const [isGiveLikeButtonClicked, setIsGiveLikeButtonClicked] = useState(false);
   const [isGiveLikeButtonDisabled, setIsGiveLikeButtonDisabled] = useState(true);
+  const [imageWidth, setImageWidth] = useState(null);
+  const [imageHeight, setImageHeight] = useState(null);
 
   return (
     <Container size="4" align="center" content="center" >
@@ -132,16 +137,27 @@ function Gruby() {
           </Card>
           <div className="w-4/5 border bg-black border-white/20 rounded-xl">
             <div className="w-3/4 h-max content-center align-middle mt-5">
-              {photoUrl && <Image blurDataURL={photoUrl} placeholder="blur" src={photoUrl} alt="Gruby photo" width="400" height="500" />}
+              {
+                photoUrl && (imageHeight >= imageWidth) &&
+                <Image className="w-100 h-auto" blurDataURL={photoUrl}
+                  placeholder="blur" src={photoUrl} alt="Gruby photo"
+                  width={imageWidth} height={imageHeight} />
+              }
+              {
+                photoUrl && (imageHeight < imageWidth) &&
+                <Image className="h-100 w-auto" blurDataURL={photoUrl}
+                  placeholder="blur" src={photoUrl} alt="Gruby photo"
+                  width={imageWidth} height={imageHeight} />
+              }
             </div>
             <div className="w-4/5 p-5 bg-black rounded-xl shadow-md">
               <div className="flex items-center justify-between px-6 p-5 border-1 rounded-xl border-white/20">
                 <NextPhotoButton onClick={
                   async () => {
                     setServerInfo("Requesting image...");
-                    await handleOnClickGetImg();
                     setIsNextPhotoButtonDisabled(true);
                     setIsNextPhotoButtonClicked(true);
+                    await handleOnClickGetImg();
                     setServerInfo(null);
                   }
                 }
@@ -154,16 +170,19 @@ function Gruby() {
 
                 <HeartButton onClick={
                   async () => {
-                    await giveLike();
                     setIsGiveLikeButtonClicked(true);
                     setIsGiveLikeButtonDisabled(true);
+                    await giveLike();
                     getCookieExpireTime();
                   }
                 }
                   clicked={isGiveLikeButtonClicked}
                   disabled={isGiveLikeButtonDisabled}>
                   {sessionTime &&
-                    <CountdownClock width="50px" height="50px" textSize="text-m" duration={(sessionTime - Date.now())} onTimeUp={() => handleOnLikeButtonTimeUp()} />
+                    <CountdownClock width="50px" height="50px"
+                      textSize="text-m"
+                      duration={(sessionTime - Date.now())}
+                      onTimeUp={() => handleOnLikeButtonTimeUp()} />
                   }
                 </HeartButton>
 
