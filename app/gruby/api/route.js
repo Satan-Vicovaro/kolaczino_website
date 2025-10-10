@@ -2,6 +2,8 @@ import { getNextPhotoDate } from "@/lib/photoTimer";
 import { canUserLikePhoto, getActivePhoto, getActivePhotoLikeCount, giveLikeToPhoto } from "@/lib/query";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { imageSizeFromFile } from 'image-size/fromFile'
+import path from "path";
 
 
 async function handleGiveLike(photoId, sessionId) {
@@ -35,6 +37,13 @@ async function handleGetPhotoUrl() {
 
     properId = activePhoto.id;
 
+
+    const filePath = path.join(process.cwd(), "photos-private", `${properId}.jpg`);
+    const imageSize = await imageSizeFromFile(filePath);
+
+    console.log("width ", imageSize.width, " height ", imageSize.height);
+
+
     const likeCount = await getActivePhotoLikeCount(properId);
     console.log("like count", likeCount)
 
@@ -42,13 +51,17 @@ async function handleGetPhotoUrl() {
 
     console.log("photo date:", nextPhotoIn);
 
-    const data = { id: properId, path: '/images-private/api', likeCount: likeCount, nextPhotoIn: nextPhotoIn };
+    const data = {
+      id: properId, path: "/images-private/api",
+      likeCount: likeCount, nextPhotoIn: nextPhotoIn,
+      imageWidth: imageSize.width, imageHeight: imageSize.height
+    };
 
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {
     console.error(error);
-    return NextResponse.error({ status: 500 });
+    return NextResponse.json({ message: "Internal error fetching Gruby's image" }, { status: 500 });
   }
 }
 
