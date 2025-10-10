@@ -1,7 +1,7 @@
 "use server"
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server'
 import { COOKIE_EXPIRE_TIME } from './lib/constants';
+import { cookies } from 'next/headers';
 
 // regex for ipv4 address
 const regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
@@ -22,7 +22,7 @@ function getIpAddress(request) {
   return ipAddress;
 }
 
-async function createCookie(request) {
+function createCookie(request) {
 
   try {
     let response = NextResponse.next();
@@ -63,9 +63,12 @@ async function createCookie(request) {
 
 export function middleware(request) {
 
-  // skip middleware for API calls
-  if (request.nextUrl.pathname.startsWith("/api/") && request.method === "POST") {
-    console.log("Skipping middleware for api POST call");
+  // middleware skip paths
+  const { pathname } = request.nextUrl
+  if (
+    pathname.startsWith("/api/") && request.method === "POST" ||
+    pathname.startsWith("/images-private/")
+  ) {
     return NextResponse.next();
   }
 
@@ -75,5 +78,4 @@ export function middleware(request) {
   }
   return NextResponse.next();
 }
-
 
