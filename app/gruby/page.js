@@ -21,8 +21,8 @@ function Gruby() {
       }
 
       const data = await res.json();
-      const url = new URL(data.path, window.location.origin);
-      url.searchParams.set("id", data.id);
+      // relative path url
+      const url = `${data.path}?id=${data.id}`;
 
       setNextPhotoDate(Date.parse(data.nextPhotoIn));
       setPhotoUrl(url.toString());
