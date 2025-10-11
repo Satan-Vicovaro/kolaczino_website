@@ -18,6 +18,10 @@ RUN \
   fi
 
 
+#prisma setup
+RUN npx prisma generate
+RUN npx prisma migrate deploy && npx prisma db seed
+
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -60,8 +64,6 @@ EXPOSE 3000
 
 ENV PORT=3000
 
-#prisma setup
-RUN npx prisma generate
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
