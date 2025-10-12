@@ -18,25 +18,32 @@ function PopUpDialog({ open, setOpen, handleCancel, handleConfirm,
         <Theme>
           <AlertDialog.Overlay className="AlertDialogOverlay" />
           <AlertDialog.Content
-            className="AlertDialogContent"
+            className="AlertDialogContent w-11/12"
             style={{ zIndex: 9999 }}
           >
-            <AlertDialog.Title className="AlertDialogTitle text-4xl">
+            <AlertDialog.Title className="AlertDialogTitle text-xl text-center">
               {title}
             </AlertDialog.Title>
             <div>
-              <AlertDialog.Description className="AlertDialogDescription">
+              <AlertDialog.Description className="AlertDialogDescription text-center">
                 {description}
               </AlertDialog.Description>
               {children}
             </div>
-            <div style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}>
-              <AlertDialog.Cancel asChild>
-                <Button className="AlertDialogCancelButton" onClick={handleCancel} >{cancelText}</Button>
-              </AlertDialog.Cancel>
-              <AlertDialog.Action asChild>
-                <Button className="AlertDialogApplyButton" onClick={handleConfirm} >{applyText}</Button>
-              </AlertDialog.Action>
+            <div
+              //style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}
+              className="flex justify-center items-center gap-4"
+            >
+              <div className="m-1">
+                <AlertDialog.Cancel asChild>
+                  <Button className="AlertDialogCancelButton" onClick={handleCancel} >{cancelText}</Button>
+                </AlertDialog.Cancel>
+              </div>
+              <div className="m-1">
+                <AlertDialog.Action asChild>
+                  <Button className="AlertDialogApplyButton" onClick={handleConfirm} >{applyText}</Button>
+                </AlertDialog.Action>
+              </div>
             </div>
           </AlertDialog.Content>
         </Theme>

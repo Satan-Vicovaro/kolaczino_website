@@ -67,7 +67,7 @@ function TTTGame() {
         <Section size={"3"}>
           <Container size={"2"}>
             <Box align="center" style={{ background: "var(--gray-a2)", borderRadius: "var(--radius-3)", display: "block", padding: "10px" }}>
-              <Text as="p" size="8"> Welcome to the n-dimensional tik-tac-toe !</Text>
+              <Text as="p" size={{ initial: "6", md: "8" }}> Welcome to the n-dimensional tik-tac-toe !</Text>
               <Section size="1" />
               <GameInfo
                 scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB}
@@ -83,12 +83,13 @@ function TTTGame() {
         </Section>
         <Container size="4" align="center">
           <Box align="center"> {/*center aligment */}
-            <Flex align="center" style={{
+            <div align="center" style={{
               display: "block",
               overflow: "hidden",
-              width: "1000px",
-              height: "1000px",
-            }}>
+              width: "70%",
+              height: "750px",
+            }}
+            >
               <TransformWrapper
                 minScale={0.2}
                 initialScale={1}
@@ -98,7 +99,7 @@ function TTTGame() {
                 doubleClick={{ disabled: true }}
               >
                 {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                  <Box>
+                  <div className="border-2 border-grass-2 overflow-hidden">
                     <Box style={{
                       background: "var(--gray-a2)",
                       display: "inline-flex",
@@ -118,15 +119,16 @@ function TTTGame() {
                       wrapperClass="board-container"
                       contentStyle={{ pointerEvents: "all" }}
                     > {/* this class does not support inline css? */}
-                      <Box ref={movableBoardDivRef} style={{
-                        width: size.width,
-                        height: size.height,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        background: "var(--gray-a7)",
-
-                      }}>
+                      <div ref={movableBoardDivRef}
+                        style={{
+                          width: size.width,
+                          height: size.height,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "var(--gray-a7)",
+                        }}
+                      >
                         <Board
                           scorePlayerA={scorePlayerA}
                           scorePlayerB={scorePlayerB}
@@ -144,12 +146,12 @@ function TTTGame() {
                           setResetBoard={setResetBoard}
                           onGameEnd={handleOnGameEnd}
                         />
-                      </Box>
+                      </div>
                     </TransformComponent>
-                  </Box>
+                  </div>
                 )}
               </TransformWrapper>
-            </Flex>
+            </div>
           </Box>
         </Container>
         <Section size="1" />

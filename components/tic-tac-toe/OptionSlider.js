@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Slider } from "radix-ui";
 import { Flex, Text, Button, Box, Container, Strong } from "@radix-ui/themes";
 import "./OptionSlider.css"
 
-function OptionSlider( {value, setValue, max = 10, min = 0, text=""} ) {
+function OptionSlider({ value, setValue, max = 10, min = 0, text = "" }) {
 
   return (
     <>
@@ -13,12 +13,13 @@ function OptionSlider( {value, setValue, max = 10, min = 0, text=""} ) {
           alignItems: "center",
           justifyContent: "center",
         }}>{text}</Text>
-        <Box style={{ 
-          background: "var(--gray-a2)", 
+        <Box style={{
+          background: "var(--gray-a2)",
           borderRadius: "var(--radius-3)",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center", }}>
+          justifyContent: "center",
+        }}>
           <Container size="1">
             <Slider.Root className="SliderRoot" onValueChange={setValue} value={value} defaultValue={value} max={max} min={min} step={1} >
               <Slider.Track className="SliderTrack">
