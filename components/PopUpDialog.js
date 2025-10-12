@@ -1,7 +1,7 @@
 "use client";
 import React from "react"
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import { Button, Card, Theme } from "@radix-ui/themes";
+import { Button, Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/tokens/base.css";
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
@@ -31,7 +31,6 @@ function PopUpDialog({ open, setOpen, handleCancel, handleConfirm,
               {children}
             </div>
             <div
-              //style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}
               className="flex justify-center items-center gap-4"
             >
               <div className="m-1">

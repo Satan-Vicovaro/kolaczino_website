@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Slider } from "radix-ui";
-import { Flex, Text, Button, Box, Container, Strong } from "@radix-ui/themes";
+import { Flex, Text, Box, Container } from "@radix-ui/themes";
 import "./OptionSlider.css"
 
 function OptionSlider({ value, setValue, max = 10, min = 0, text = "" }) {
