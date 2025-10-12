@@ -18,7 +18,7 @@ function PopUpDialog({ open, setOpen, handleCancel, handleConfirm,
         <Theme>
           <AlertDialog.Overlay className="AlertDialogOverlay" />
           <AlertDialog.Content
-            className="AlertDialogContent w-11/12"
+            className="AlertDialogContent w-11/12 md:w-1/3"
             style={{ zIndex: 9999 }}
           >
             <AlertDialog.Title className="AlertDialogTitle text-xl text-center">
