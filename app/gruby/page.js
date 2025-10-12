@@ -1,9 +1,9 @@
 "use client"
 import ErrorCard from "@/components/infoCards/ErrorCard";
 import ServerCard from "@/components/infoCards/ServerCard";
-import { Box, Button, Card, Container, Flex, Text, Strong } from "@radix-ui/themes";
+import { Box, Card, Container, Strong } from "@radix-ui/themes";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CountdownClock from "@/components/CountdownClock";
 import HeartButton from "@/components/gruby_page/heartButton";
 import NextPhotoButton from "@/components/gruby_page/NextPhotoButton";
@@ -127,9 +127,9 @@ function Gruby() {
           <p className="m-2 pt-6 text-8 md:text-7xl">Gruby appreciation site</p>
           <Card className="m-10">
             <p className="m-1 p-1 text-justify text-m md:text-2xl">
-              Deep dive into wonderfull world of <Strong> unlimited </Strong> Gruby's  photos
+              Deep dive into the wonderfull world of <Strong> unlimited </Strong> photos of Gruby
               (well, actually☝️🤓 only one image per day).
-              Feel free to leave a like to a Gruby's photo, for every like he gets one more scoop of food!
+              Feel free to leave a heart❤️ to a Gruby's photo, for every like he gets one more scoop of food!
             </p>
             <p className="m-1 p-1 text-justify text-m md:text-2xl">
               (you don't want to starve him, do you 😿)
