@@ -30,28 +30,93 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     setSquares(nextSquares);
   }
 
-  function handleSquareMouseEnter(squareNumber) {
-    let position = getPostion(squareNumber);
-    let neighbourhood = getPointNeighbourhood(position, neighbourhoodDirections, size);
-    neighbourhood = neighbourhood.map(element => getSquareIndex(element));
-
-    const nextSquares = squares.slice();
-
-    for (let i = 0; i < neighbourhood.length; i++) {
-      let squareToChange = neighbourhood[i];
-      nextSquares[squareToChange].hovered = true;
-    }
-
-    setSquares(nextSquares);
+  function neighbourhoodIndicesFromPosition(squareNumber) {
+    const position = getPostion(squareNumber);
+    const neighbourhood = getPointNeighbourhood(position, neighbourhoodDirections, size)
+      .map(el => getSquareIndex(el));
+    return new Set(neighbourhood);
   }
 
-  function handleSquareMouseLeave(i) {
-    const nextSquares = squares.slice();
-    for (let i = 0; i < squares.length; i++) {
-      nextSquares[i].hovered = false;
+  // pointer event aware enter
+  function handleSquareMouseEnter(squareNumber, e) {
+    // optional: accept both mouse and pointer events; e may be undefined if you were calling the function without event
+    // attempt to capture pointer so re-renders won't drop events (browser may not support it -> ignore errors)
+    try {
+      if (e && e.pointerId && e.currentTarget && e.currentTarget.setPointerCapture) {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }
+    } catch (err) {
+      /* ignore if unsupported */
     }
-    setSquares(nextSquares);
+
+    const neighbourhoodSet = neighbourhoodIndicesFromPosition(squareNumber);
+
+    // functional update -> create new objects only for changed squares
+    setSquares(prev => {
+      // fast path: if no change at all, return prev to avoid re-render
+      let needsChange = false;
+      for (let i = 0; i < prev.length; i++) {
+        const shouldBeHovered = neighbourhoodSet.has(prev[i].id);
+        if (prev[i].hovered !== shouldBeHovered) { needsChange = true; break; }
+      }
+      if (!needsChange) return prev;
+
+      return prev.map(s => {
+        const shouldBeHovered = neighbourhoodSet.has(s.id);
+        // only create a new object when hovered value needs to change
+        if (s.hovered === shouldBeHovered) return s;
+        return { ...s, hovered: shouldBeHovered };
+      });
+    });
   }
+
+  // pointer-aware leave
+  function handleSquareMouseLeave(squareNumber, e) {
+    // release capture if we captured on enter
+    try {
+      if (e && e.pointerId && e.currentTarget && e.currentTarget.releasePointerCapture) {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      }
+    } catch (err) {
+      /* ignore */
+    }
+
+    // Only clear hovered if any was true (avoid unnecessary re-render)
+    setSquares(prev => {
+      let anyHovered = false;
+      for (let i = 0; i < prev.length; i++) {
+        if (prev[i].hovered) { anyHovered = true; break; }
+      }
+      if (!anyHovered) return prev;
+      return prev.map(s => (s.hovered ? { ...s, hovered: false } : s));
+    });
+  }
+
+  // function handleSquareMouseEnter(squareNumber) {
+  //   console.log("I entered");
+  //   let position = getPostion(squareNumber);
+  //   let neighbourhood = getPointNeighbourhood(position, neighbourhoodDirections, size);
+  //   neighbourhood = neighbourhood.map(element => getSquareIndex(element));
+  //
+  //   const nextSquares = squares.slice();
+  //
+  //   for (let i = 0; i < neighbourhood.length; i++) {
+  //     let squareToChange = neighbourhood[i];
+  //     nextSquares[squareToChange].hovered = true;
+  //   }
+  //
+  //   setSquares(nextSquares);
+  // }
+  //
+  // function handleSquareMouseLeave(i) {
+  //   console.log("I leaved");
+  //   // alert("Meow");
+  //   const nextSquares = squares.slice();
+  //   for (let i = 0; i < squares.length; i++) {
+  //     nextSquares[i].hovered = false;
+  //   }
+  //   setSquares(nextSquares);
+  // }
 
   // index into (x,y,z,...)
   function getPostion(square) {
@@ -258,8 +323,8 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
               key={square.id}
               value={square.value}
               onSquareClick={() => handleSquareClick(square.id)}
-              onSquareMouseEnter={() => handleSquareMouseEnter(square.id)}
-              onSquareMouseLeave={() => handleSquareMouseLeave(square.id)}
+              onSquareMouseEnter={(e) => handleSquareMouseEnter(square.id, e)}
+              onSquareMouseLeave={(e) => handleSquareMouseLeave(square.id, e)}
               hovered={square.hovered}
             />
           ))}
@@ -391,9 +456,10 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          position: "relative",
         }}>
         {buildGrid(squares, dimensionsNum)}</div>
-    </div>
+    </div >
   );
 }
 

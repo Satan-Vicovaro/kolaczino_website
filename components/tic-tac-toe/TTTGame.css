@@ -1,7 +1,7 @@
 .square {
   width: 60px;
   height: 60px;
-  line-height: 60px; /* 👈 prevents shifting */
+  line-height: 60px;
   border: 2px solid #333;
   font-size: 24px;
   font-weight: bold;
@@ -12,23 +12,16 @@
   padding: 0;
 }
 
-  
-.whole-content {
-  /* border: 2px solid purple; */
-}
-
-.transform-container{
-  /* border: 2px solid lightseagreen; */
+.transform-container {
   display: flex;
-  align-items: center;   /* centers content vertically */
-  justify-content: center; /* centers content horizontally */
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  
 }
 
-.board-container{
-  /* border: 2px solid green; */
+.board-container {
   display: block;
-  background:var(--gray-a4);
-  border-radius:var(--radius-3);
+  background: var(--gray-a4);
+  border-radius: var(--radius-3);
+  pointer-events: all;
 }
