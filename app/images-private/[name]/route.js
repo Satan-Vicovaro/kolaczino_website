@@ -3,13 +3,14 @@ import fs from "fs";
 import { getActivePhoto } from "@/lib/query";
 import { NextResponse } from "next/server";
 
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const requestedId = searchParams.get("id");
 
     const photo = await getActivePhoto();
-    console.log("Active photo: ", photo)
+    // console.log("Active photo: ", photo)
 
     if (requestedId != photo.id) {
       console.warn("Different ids:", requestedId, "!==", photo.id);

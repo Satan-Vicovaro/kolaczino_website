@@ -32,7 +32,7 @@ async function handleGetPhotoUrl() {
       console.warn("No photo is active, photo id is set to 1");
       properId = 1;
     } else {
-      console.log("Requesting photo:", activePhoto);
+      // console.log("Requesting photo:", activePhoto);
     }
 
     properId = activePhoto.id;
@@ -41,11 +41,10 @@ async function handleGetPhotoUrl() {
     const filePath = path.join(process.cwd(), "photos-private", `${properId}.jpg`);
     const imageSize = await imageSizeFromFile(filePath);
 
-    console.log("width ", imageSize.width, " height ", imageSize.height);
-
+    // console.log("width ", imageSize.width, " height ", imageSize.height);
 
     const likeCount = await getActivePhotoLikeCount(properId);
-    console.log("like count", likeCount)
+    console.log(`Requesting photo id: ${properId}, likeCount: ${likeCount}`)
 
     const nextPhotoIn = getNextPhotoDate();
 

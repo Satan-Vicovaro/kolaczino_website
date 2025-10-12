@@ -40,8 +40,6 @@ export async function POST(req) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  console.log("New user, setting new cookie");
-
   const cookieStore = await cookies();
   if (!cookieStore.has("session")) {
     console.error("no session cookie was sent!");
@@ -51,7 +49,8 @@ export async function POST(req) {
   const { ipAddress } = await req.json();
   const sessionId = cookieStore.get("session").value;
 
-  console.log("id:", sessionId);
+  console.info(`New user: ip: ${ipAddress}, session: ${sessionId}`);
+
   try {
     const session = await prisma.sessionData.upsert({
       where: { sessionId },

@@ -1,7 +1,6 @@
 "use server"
 import { NextResponse } from 'next/server'
 import { COOKIE_EXPIRE_TIME } from './lib/constants';
-import { cookies } from 'next/headers';
 
 // regex for ipv4 address
 const regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
@@ -13,11 +12,11 @@ function getIpAddress(request) {
 
   if (ipAddress.search("::ffff:") !== -1) {
     ipAddress = ipAddress.substring("::ffff:".length);
-    console.log("Ipv4 in Ipv6: ", ipAddress);
+    console.log("New request from: Ipv4 in Ipv6: ", ipAddress);
   }
 
   if (!regex.test(ipAddress)) {
-    console.warn("weird ip addres: ", ipAddress);
+    console.warn("New request from: weird ip addres: ", ipAddress);
   }
   return ipAddress;
 }
