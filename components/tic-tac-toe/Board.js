@@ -5,7 +5,10 @@ import Square from "./Square";
 
 function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
   dimensionNum, boardSize, actualBoardDivRef, disableCenterPoint,
-  resetBoard, setResetBoard }) {
+  resetBoard, setResetBoard, onGameEnd }) {
+
+  let [squaresTakenCount, setSquaresTakenCount] = useState(1);
+
   function handleSquareClick(i) {
     //square is already taken 
     if (squares[i].value !== "") {
@@ -28,6 +31,20 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
     setXIsNext(!xIsNext)
 
     setSquares(nextSquares);
+
+    console.log(squaresTakenCount);
+
+    setSquaresTakenCount(squaresTakenCount + 1);
+    let effectiveSquareCount = squareCount;
+    if (disableCenterPoint) {
+      effectiveSquareCount -= 1;
+    }
+    if (squaresTakenCount >= effectiveSquareCount) {
+      console.log("Game has finished:", squaresTakenCount, " ", squareCount);
+      setSquaresTakenCount(1);
+      onGameEnd();
+    }
+
   }
 
   function neighbourhoodIndicesFromPosition(squareNumber) {
@@ -39,8 +56,6 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
 
   // pointer event aware enter
   function handleSquareMouseEnter(squareNumber, e) {
-    // optional: accept both mouse and pointer events; e may be undefined if you were calling the function without event
-    // attempt to capture pointer so re-renders won't drop events (browser may not support it -> ignore errors)
     try {
       if (e && e.pointerId && e.currentTarget && e.currentTarget.setPointerCapture) {
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -51,9 +66,7 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
 
     const neighbourhoodSet = neighbourhoodIndicesFromPosition(squareNumber);
 
-    // functional update -> create new objects only for changed squares
     setSquares(prev => {
-      // fast path: if no change at all, return prev to avoid re-render
       let needsChange = false;
       for (let i = 0; i < prev.length; i++) {
         const shouldBeHovered = neighbourhoodSet.has(prev[i].id);
@@ -421,15 +434,27 @@ function Board({ scorePlayerA, scorePlayerB, setScorePlayerA, setScorePlayerB,
   useEffect(() => {
     if (resetBoard) {
       setSquares(
-        Array.from({ length: squareCount }, (_, i) => ({
-          id: i,
-          value: "",
-          hovered: false,
-        }))
+        Array.from({ length: squareCount }, (_, i) => (
+          {
+            id: i,
+            value: "",
+            hovered: false,
+          }
+        ))
       );
       setResetBoard(false);
       setScorePlayerA(0);
       setScorePlayerB(0);
+      setSquaresTakenCount(1);
+      if (disableCenterPoint) {
+        const centerIndex = Math.floor((squareCount - 1) / 2);
+
+        setSquares(prev =>
+          prev.map((sq, i) =>
+            i === centerIndex ? { ...sq, value: " " } : sq
+          )
+        );
+      }
     }
   }, [resetBoard, squareCount]);
 

@@ -3,14 +3,20 @@ import Board from "./Board"
 import GameInfo from "./GameInfo"
 import "./TTTGame.css"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Box, Button, Container, Section, Text, Flex, Menubar } from "@radix-ui/themes"
+import { Box, Card, Button, Container, Section, Text, Flex, Menubar, Strong } from "@radix-ui/themes"
 import { Toolbar } from "radix-ui";
 import { ResetIcon, ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
+import PopUpDialog from "../PopUpDialog";
+
 
 function TTTGame() {
 
   function onResetButtonClick() {
     setResetBoard(true);
+  }
+
+  function handleOnGameEnd() {
+    setGameEndPanel(true);
   }
 
   let [scorePlayerA, setScorePlayerA] = useState(0);
@@ -20,6 +26,8 @@ function TTTGame() {
   let [boardSize, setBoardSize] = useState([3]);
   let [disableMiddleElement, setDisableMiddleElement] = useState(false);
   let [resetBoard, setResetBoard] = useState(false);
+  let [gameEndPanel, setGameEndPanel] = useState(false);
+
 
 
   const [size, setSize] = useState({ width: 1000, height: 1000 });
@@ -134,6 +142,7 @@ function TTTGame() {
                           disableCenterPoint={disableMiddleElement}
                           resetBoard={resetBoard}
                           setResetBoard={setResetBoard}
+                          onGameEnd={handleOnGameEnd}
                         />
                       </Box>
                     </TransformComponent>
@@ -144,6 +153,21 @@ function TTTGame() {
           </Box>
         </Container>
         <Section size="1" />
+        <PopUpDialog open={gameEndPanel} setOpen={setGameEndPanel}
+          title="The game has finished!" cancelText="Show board"
+          handleConfirm={() => onResetButtonClick()} applyText="New game"
+        >
+          {scorePlayerA === scorePlayerB && <div className="text-2xl text-center"> Draw </div>}
+          {scorePlayerA > scorePlayerB && <div className="text-2xl text-center"> Player<Strong> X </Strong>won!</div>}
+          {scorePlayerA < scorePlayerB && <div className="text-2xl text-center"> Player<Strong> O </Strong>won!</div>}
+          <Card size="1" className="m-5 bg-white">
+            <Text as="div" size="4" align="center"> Player <Strong> X </Strong> score: {scorePlayerA} </Text>
+          </Card>
+          <Card size="1" className="m-5 bg-white">
+            <Text as="div" size="4" align="center"> Player <Strong> O </Strong> score: {scorePlayerB} </Text>
+          </Card>
+
+        </PopUpDialog>
       </Box>
     </>
   )
