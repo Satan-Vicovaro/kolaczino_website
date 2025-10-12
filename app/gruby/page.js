@@ -124,33 +124,34 @@ function Gruby() {
     <Container size="4" align="center" content="center" >
       <Box align="center" content="center">
         <Box className="h-max rounded-xl pb-10" style={{ backgroundColor: "black" }}>
-          <div>
-            <Text as="div" size="9" className="m-10 p-10">Gruby appreciation site</Text>
-          </div>
+          <p className="m-2 pt-6 text-8 md:text-7xl">Gruby appreciation site</p>
           <Card className="m-10">
-            <Text as="div" size="6" className="m-10 p-10 text-justify">
+            <p className="m-1 p-1 text-justify text-m md:text-2xl">
               Deep dive into wonderfull world of <Strong> unlimited </Strong> Gruby's  photos
               (well, actually☝️🤓 only one image per day).
               Feel free to leave a like to a Gruby's photo, for every like he gets one more scoop of food!
+            </p>
+            <p className="m-1 p-1 text-justify text-m md:text-2xl">
               (you don't want to starve him, do you 😿)
-            </Text>
+            </p>
           </Card>
-          <div className="w-4/5 border bg-black border-white/20 rounded-xl">
-            <div className="w-3/4 h-max content-center align-middle mt-5">
+          <div className="w-11/12 border bg-black border-white/20 rounded-xl">
+            <div className="w-5/6 h-max content-center align-middle mt-5">
               {
-                photoUrl && (imageHeight >= imageWidth) &&
-                <Image className="w-100 h-auto" blurDataURL={photoUrl}
+                photoUrl && (imageHeight <= imageWidth) &&
+                <Image className="w-100 h-auto md:w-175" blurDataURL={photoUrl}
                   placeholder="blur" src={photoUrl} alt="Gruby photo"
-                  width={imageWidth} height={imageHeight} />
+                  width={imageWidth} height={imageHeight}
+                />
               }
               {
-                photoUrl && (imageHeight < imageWidth) &&
-                <Image className="h-100 w-auto" blurDataURL={photoUrl}
+                photoUrl && (imageHeight > imageWidth) &&
+                <Image className="h-100 w-auto md:h-175" blurDataURL={photoUrl}
                   placeholder="blur" src={photoUrl} alt="Gruby photo"
                   width={imageWidth} height={imageHeight} />
               }
             </div>
-            <div className="w-4/5 p-5 bg-black rounded-xl shadow-md">
+            <div className="w-1/1 p-5 bg-black rounded-xl shadow-md md:w-3/5">
               <div className="flex items-center justify-between px-6 p-5 border-1 rounded-xl border-white/20">
                 <NextPhotoButton onClick={
                   async () => {
@@ -186,7 +187,7 @@ function Gruby() {
                   }
                 </HeartButton>
 
-                <div className="w-14 h-14 border border-white/30 rounded-full flex items-center justify-center text-white text-2xl">
+                <div className="w-14 h-14 border border-white/30 rounded-full flex items-center justify-center text-white text-2xl md:mr-8">
                   {(likeCount !== null) && <div> {likeCount} </div>}
                 </div>
               </div>

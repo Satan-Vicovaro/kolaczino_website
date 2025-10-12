@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "radix-themes-tw";
 @import "@radix-ui/themes/styles.css";
 @import "@radix-ui/colors/gray.css";
 

@@ -11,14 +11,14 @@ export default function NavBar() {
             <Link
               href="/gruby"
               className="CardColor flex items-center justify-center w-full h-full 
-                         rounded-md border bg-grayRadix-6"
+                         rounded-md border bg-grayRadix-6 text-sm"
             >
               Gruby
             </Link>
 
             <Link
               href="/tic-tac-toe"
-              className="CardColor flex items-center justify-center w-full h-full rounded-md border"
+              className="CardColor flex items-center justify-center w-full h-full rounded-md border text-sm"
             >
               Fancy Tic-Tac-Toe
             </Link>

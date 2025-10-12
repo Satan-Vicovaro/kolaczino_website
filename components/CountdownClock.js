@@ -46,10 +46,12 @@ export default function CountdownClock({ duration = 60000, width = "", height = 
   const seconds = totalSeconds % 60;
 
   return (
-    <div className={`bg-gray-0 ${textSize}`}>
-      <span className="clock">{pad(hours)}:</span>
-      <span className="clock">{pad(minutes)}:</span>
-      <span className="secs">{pad(seconds)}</span>
+    <div className={`bg-gray-0`}>
+      <strong className="justify-center align-middle text-center">
+        <span className="text-2 md:text-5">{pad(hours)}:</span>
+        <span className="text-2 md:text-5">{pad(minutes)}:</span>
+        <span className="text-2 md:text-5">{pad(seconds)}</span>
+      </strong>
     </div>
   );
 }

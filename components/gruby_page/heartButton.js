@@ -19,7 +19,7 @@ export default function HeartButton({ onClick, disabled = false, children, click
 
       {clicked && (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="w-14 h-14 flex items-center justify-center cursor-not-allowed">
+          <div className="w-10 h-10 flex items-center justify-center cursor-not-allowed">
             {children}
           </div>
         </div>

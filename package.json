@@ -21,6 +21,7 @@
     "image-size": "^2.0.2",
     "next": "15.5.2",
     "node-cron": "^4.2.1",
+    "radix-themes-tw": "^1.1.0",
     "react": "19.1.0",
     "react-clock": "^6.0.0",
     "react-dom": "19.1.0",
