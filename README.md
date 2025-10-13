@@ -77,13 +77,13 @@ Build the website from the source and intsall dependencies:
 1. Enshure you have docker installed on your machine
 2. **Clone the repository:**
     ```sh
-      git clone https://github.com/Satan-Vicovaro/kolaczino_website.git
+    git clone https://github.com/Satan-Vicovaro/kolaczino_website.git
     ```
     
 3. **Navigate to the project directory:**
 
     ```sh
-      cd kolaczino_website.git
+    cd kolaczino_website.git
     ```
 
 4. Create file .env with variable: **INTERNAL_MESSAGE_ID="..."**, with some long random string inside.
@@ -91,11 +91,11 @@ Build the website from the source and intsall dependencies:
 6. Change basicData variable in **prisma/seed.js**, following the convention shown there.
 7. **Run this command to build docker image**
      ```sh
-       build docker image: docker build -t nextjs-docker .
+     build docker image: docker build -t nextjs-docker .
      ```
 9. **Run docker image**
      ```sh
-         docker run -p 3000:3000 nextjs-docker
+     docker run -p 3000:3000 nextjs-docker
      ```
      docker is running on port 3000.
    
