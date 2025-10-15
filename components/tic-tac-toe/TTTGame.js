@@ -82,12 +82,12 @@ function TTTGame() {
           </Container>
         </Section>
         <Container size="4" align="center">
-          <Box align="center"> {/*center aligment */}
+          <Box align="center">
             <div align="center" style={{
               display: "block",
               overflow: "hidden",
-              width: "70%",
-              height: "750px",
+              width: "85%",
+              height: "75%",
             }}
             >
               <TransformWrapper
@@ -99,7 +99,7 @@ function TTTGame() {
                 doubleClick={{ disabled: true }}
               >
                 {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                  <div className="border-2 border-grass-2 overflow-hidden">
+                  <div className="overflow-hidden">
                     <Box style={{
                       background: "var(--gray-a2)",
                       display: "inline-flex",
@@ -107,7 +107,6 @@ function TTTGame() {
                       paddingRight: "10px",
                       paddingTop: "5px",
                       paddingBottom: "5px",
-                      borderRadius: "var(--radius-3)"
                     }}>
                       <Toolbar.Root style={{ display: "flex", gap: "10px" }}>
                         <Toolbar.Button onClick={() => zoomIn()}> <ZoomInIcon width={32} height={32} /> </Toolbar.Button>
@@ -117,7 +116,7 @@ function TTTGame() {
                     </Box>
                     <TransformComponent
                       wrapperClass="board-container"
-                      contentStyle={{ pointerEvents: "all" }}
+                      contentStyle={{ pointerEvents: "all", borderRadius: "0px" }}
                     > {/* this class does not support inline css? */}
                       <div ref={movableBoardDivRef}
                         style={{
