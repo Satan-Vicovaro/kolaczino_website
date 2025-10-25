@@ -91,7 +91,7 @@ Build the website from the source and intsall dependencies:
 6. Change basicData variable in **prisma/seed.js**, following the convention shown there.
 7. **Run this command to build docker image**
      ```sh
-     build docker image: docker build -t nextjs-docker .
+     docker build -t nextjs-docker .
      ```
 9. **Run docker image**
      ```sh
