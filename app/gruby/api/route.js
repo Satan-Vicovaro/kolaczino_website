@@ -70,7 +70,7 @@ export async function GET() {
 
 export async function POST(req) {
   const body = await req.json();
-  console.log("Getting POST message: ", body);
+  console.log("Getting POST message: ", JSON.stringify(body));
 
   const giveLike = body?.giveLike;
   const photoId = body?.photoId;
