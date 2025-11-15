@@ -1,13 +1,25 @@
 "use server"
 import { NextResponse } from 'next/server'
-import { COOKIE_EXPIRE_TIME } from './lib/constants';
+import { BEHIND_PROXY, COOKIE_EXPIRE_TIME } from './lib/constants';
 
 // regex for ipv4 address
 const regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
 
 function getIpAddress(request) {
 
-  const forwardedFor = request.headers.get("x-forwarded-for");
+  let forwardedFor;
+  if (!BEHIND_PROXY) {
+    forwardedFor = request.headers.get("x-forwarded-for");
+  }
+  else {
+    forwardedFor = request.headers.get("X-Real-IP");
+  }
+
+  if (forwardedFor === null) {
+    console.warn("Could not get clients ip address")
+    return "300.300.300.300"
+  }
+
   let ipAddress = forwardedFor?.split(",")[0];
 
   if (ipAddress.search("::ffff:") !== -1) {
@@ -30,8 +42,8 @@ function createCookie(request) {
     response.cookies.set({
       name: "session",
       value: sessionId,
-      httpOnly: true,
-      secure: true,
+      httpOnly: false,
+      secure: false,
       path: "/",
       maxAge: COOKIE_EXPIRE_TIME / 1000,
     })

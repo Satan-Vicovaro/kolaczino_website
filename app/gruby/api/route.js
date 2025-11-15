@@ -20,6 +20,7 @@ async function handleGiveLike(photoId, sessionId) {
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error(error);
+    return NextResponse.json({ message: "Internal error fetching Gruby's image" }, { status: 500 });
   }
 }
 

@@ -36,7 +36,12 @@ export async function POST(req) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
   if (internalRequest !== process.env.INTERNAL_MESSAGE_ID) {
-    console.warn("Somebody try to get INTERNAL_MESSAGE_ID: ", req.headers.get("x-forwarded-for"), "->", internalRequest);
+    if (!BEHIND_PROXY) {
+      console.warn("Somebody try to get INTERNAL_MESSAGE_ID: ", req.headers.get("x-forwarded-for"), "->", internalRequest);
+    }
+    else {
+      console.warn("Somebody try to get INTERNAL_MESSAGE_ID: ", request.headers.get("X-Real-IP"), "->", internalRequest);
+    }
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
