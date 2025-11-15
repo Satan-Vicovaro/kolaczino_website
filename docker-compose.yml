@@ -1,0 +1,19 @@
+services:
+  site:
+    container_name: "kolaczino_web_server"
+    build: "./site"
+    networks:
+      - "webnet"
+
+  nginx:
+    container_name: "nginx-proxy"
+    build: "./proxy"
+    ports:
+      - "192.168.0.70:2137:3000"
+    networks: 
+      - "webnet"
+      
+
+networks:
+ webnet:
+   driver: "bridge"
