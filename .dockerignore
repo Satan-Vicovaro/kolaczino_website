@@ -1,0 +1,7 @@
+node_modules
+.next
+.git
+*.md
+.gitignore
+docker-compose*.yml
+photos-private

@@ -1,0 +1,21 @@
+-- CreateTable
+CREATE TABLE "Photo" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL DEFAULT '',
+    "description" TEXT NOT NULL DEFAULT '',
+    "pathToImg" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "PhotoStats" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "usedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "likes" INTEGER NOT NULL DEFAULT 0,
+    "photoId" INTEGER NOT NULL,
+    CONSTRAINT "PhotoStats_photoId_fkey" FOREIGN KEY ("photoId") REFERENCES "Photo" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Photo_pathToImg_key" ON "Photo"("pathToImg");

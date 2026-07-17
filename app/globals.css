@@ -1,0 +1,77 @@
+@import "tailwindcss";
+@import "radix-themes-tw";
+@import "@radix-ui/themes/styles.css";
+@import "@radix-ui/colors/gray.css";
+@import "@radix-ui/colors/orange.css";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --accent-glow: rgba(249, 126, 27, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle gradient background for main content areas */
+.hero-gradient {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, var(--accent-glow), transparent);
+}
+
+/* Glass card effect */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-medium);
+  background: var(--surface-hover);
+}
+
+/* Smooth transitions for interactive elements */
+button, a {
+  transition: all 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-6);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-8);
+}
+
+/* Selection color */
+::selection {
+  background: var(--orange-9);
+  color: white;
+}

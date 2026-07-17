@@ -1,0 +1,94 @@
+"use server"
+import { NextResponse } from 'next/server'
+import { BEHIND_PROXY, COOKIE_EXPIRE_TIME } from './lib/constants';
+
+// regex for ipv4 address
+const regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
+
+function getIpAddress(request) {
+
+  let forwardedFor;
+  if (!BEHIND_PROXY) {
+    forwardedFor = request.headers.get("x-forwarded-for");
+  }
+  else {
+    forwardedFor = request.headers.get("X-Real-IP");
+  }
+
+  if (forwardedFor === null) {
+    console.warn("Could not get clients ip address")
+    return "300.300.300.300"
+  }
+
+  let ipAddress = forwardedFor?.split(",")[0];
+
+  if (ipAddress.search("::ffff:") !== -1) {
+    ipAddress = ipAddress.substring("::ffff:".length);
+    console.log("New request from: Ipv4 in Ipv6: ", ipAddress);
+  }
+
+  if (!regex.test(ipAddress)) {
+    console.warn("New request from: weird ip addres: ", ipAddress);
+  }
+  return ipAddress;
+}
+
+function createCookie(request) {
+
+  try {
+    let response = NextResponse.next();
+    const sessionId = crypto.randomUUID();
+
+    response.cookies.set({
+      name: "session",
+      value: sessionId,
+      httpOnly: false,
+      secure: false,
+      path: "/",
+      maxAge: COOKIE_EXPIRE_TIME / 1000,
+    })
+
+    const ipAddress = getIpAddress(request);
+    const cookieHeader = `session=${sessionId}`;
+
+    const internalUrl = "http://localhost:3000/api/session";
+    // sending request to update database
+    fetch(internalUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-request": process.env.INTERNAL_MESSAGE_ID,
+        "Cookie": cookieHeader,
+      },
+      body: JSON.stringify({
+        ipAddress: ipAddress ?? "unknown"
+      })
+    }).catch(err => console.error("Internal fetch failed: ", err));
+
+    return response;
+  } catch (error) {
+    console.error("middleware error ;3 ", ipAddress);
+    console.error(error);
+  }
+}
+
+
+
+export function middleware(request) {
+  console.log("Middleware is ok");
+  // middleware skip paths
+  const { pathname } = request.nextUrl
+  if (
+    pathname.startsWith("/api/") && request.method === "POST" ||
+    pathname.startsWith("/images-private/")
+  ) {
+    return NextResponse.next();
+  }
+
+  if (!request.cookies.has("session")) {
+    const response = createCookie(request);
+    return response;
+  }
+  return NextResponse.next();
+}
+

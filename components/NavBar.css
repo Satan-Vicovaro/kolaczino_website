@@ -1,0 +1,17 @@
+@import "@radix-ui/themes/styles.css";
+@import "@radix-ui/colors/gray.css";
+
+.nav-link {
+  color: var(--gray-11);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--gray-12);
+}
+
+.nav-link:active {
+  transform: scale(0.98);
+}

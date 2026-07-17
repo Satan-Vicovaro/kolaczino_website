@@ -1,0 +1,63 @@
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/themes/tokens/base.css";
+
+.AlertDialogOverlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.AlertDialogContent {
+  background: var(--gray-2);
+  color: var(--gray-12);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--gray-5);
+  border-radius: 16px;
+  padding: 24px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.AlertDialogContent:focus {
+  outline: none;
+}
+
+.AlertDialogTitle {
+  color: var(--gray-12);
+  font-weight: 600;
+}
+
+.AlertDialogDescription {
+  color: var(--gray-10);
+}
+
+.rt-Button.AlertDialogApplyButton {
+  background-color: var(--orange-9);
+}
+
+.rt-Button.AlertDialogApplyButton:hover {
+  background-color: var(--orange-10);
+}
+
+.rt-Button.AlertDialogCancelButton {
+  background-color: var(--gray-5);
+}
+
+.rt-Button.AlertDialogCancelButton:hover {
+  background-color: var(--gray-6);
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes contentShow {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
